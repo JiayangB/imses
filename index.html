@@ -947,7 +947,7 @@
         <div class="page-num">04 · The Science</div>
         <h1 class="page-title">Real physics. Real biomechanics. Real code.</h1>
         <p class="page-sub">
-          Every sensor value is converted from raw ADC counts using closed-form equations derived from device physics — not just canned library calls. Here are four of the core formulas.
+          Every sensor value is converted from raw signals using closed-form equations derived from device physics — not canned library calls. Here are six of the core formulas, spanning thermodynamics, optics, signal processing, and biomechanics.
         </p>
       </div>
 
@@ -986,6 +986,40 @@ V_filtered = <span class="var">bandpass</span>(V_raw, 20 Hz, 450 Hz)
 <span class="comment">// RMS envelope in mV, window N = 50 samples</span></pre>
         <p class="formula-desc">
           Raw EMG signals are bandpass-filtered to isolate muscle activation frequencies (20–450 Hz), then converted to an RMS envelope that represents contraction intensity. Higher RMS indicates stronger muscle engagement.
+        </p>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-title">Blood oxygen · Pulse oximetry (SpO₂)</div>
+        <div class="formula-subtitle">MAX30102 dual-wavelength photoplethysmography</div>
+<pre class="formula-math">AC_red = <span class="var">peak</span>(red) − <span class="var">trough</span>(red)
+DC_red = <span class="var">mean</span>(red)
+AC_ir  = <span class="var">peak</span>(ir) − <span class="var">trough</span>(ir)
+DC_ir  = <span class="var">mean</span>(ir)
+
+<span class="var">R</span> = (AC_red / DC_red) / (AC_ir / DC_ir)
+<span class="var">SpO₂</span> = 110 − 25 × R
+
+<span class="comment">// Beer–Lambert law: ratio of pulsatile (AC) to
+// baseline (DC) absorption at 660nm vs 880nm</span></pre>
+        <p class="formula-desc">
+          The MAX30102 emits red (660 nm) and infrared (880 nm) light through the skin. Oxygenated and deoxygenated hemoglobin absorb these wavelengths differently. The ratio R of the AC/DC components at each wavelength is mapped to SpO₂ via an empirical linear calibration derived from the Beer–Lambert law.
+        </p>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-title">Heart rate · PPG peak detection</div>
+        <div class="formula-subtitle">MAX30102 infrared photoplethysmography</div>
+<pre class="formula-math">signal = <span class="var">lowpass</span>(ir_raw, 5 Hz)
+peaks[] = <span class="var">findPeaks</span>(signal, min_distance=300ms)
+
+IBI = peaks[i] − peaks[i−1]
+<span class="var">HR</span> = 60000 / <span class="var">mean</span>(IBI)
+
+<span class="comment">// IBI = inter-beat interval in ms
+// HR in beats per minute (bpm)</span></pre>
+        <p class="formula-desc">
+          The infrared PPG waveform tracks blood volume changes with each heartbeat. After low-pass filtering to remove motion artifacts, peaks are detected to find inter-beat intervals. Heart rate is computed as 60 seconds divided by the mean interval between peaks.
         </p>
       </div>
 
