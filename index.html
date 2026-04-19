@@ -645,7 +645,7 @@
   <!-- ═════════ SIDEBAR ═════════ -->
   <aside class="sidebar">
     <div class="side-brand">
-      <div class="side-mark">F</div>
+      <div class="side-mark">I</div>
       <div class="side-brand-text">
         <div class="side-brand-name">IMSES</div>
         <div class="side-brand-sub">Research Portfolio · 2026</div>
@@ -665,14 +665,14 @@
         <span>Overview</span>
         <span class="nav-num">01</span>
       </button>
-      <button class="nav-item" data-page="problem">
-        <span class="nav-icon">◇</span>
-        <span>The Problem</span>
+      <button class="nav-item" data-page="engineering">
+        <span class="nav-icon">◈</span>
+        <span>Engineering Design</span>
         <span class="nav-num">02</span>
       </button>
-      <button class="nav-item" data-page="solution">
-        <span class="nav-icon">◈</span>
-        <span>The Solution</span>
+      <button class="nav-item" data-page="novelty">
+        <span class="nav-icon">◇</span>
+        <span>Motivation & Novelty</span>
         <span class="nav-num">03</span>
       </button>
       <button class="nav-item" data-page="science">
@@ -691,7 +691,7 @@
       <div class="side-section-label">Personal</div>
       <button class="nav-item" data-page="about">
         <span class="nav-icon">◉</span>
-        <span>About</span>
+        <span>About Me</span>
         <span class="nav-num">06</span>
       </button>
       <button class="nav-item" data-page="contact">
@@ -721,7 +721,7 @@
           IMSES is a intelligent multi-sensor elbow sleeve with <strong>7 biosensors</strong> that classifies <strong>8 human behaviors</strong> in real time and warns users before fatigue causes injury. It bridges the gap between consumer fitness trackers and clinical monitoring.
         </p>
         <div class="actions">
-          <button class="btn btn-primary btn-arrow" onclick="goto('solution')">Explore the project</button>
+          <button class="btn btn-primary btn-arrow" onclick="goto('engineering')">Explore the project</button>
           <button class="btn btn-ghost" onclick="goto('app')">Try the live demo</button>
         </div>
       </div>
@@ -760,53 +760,13 @@
       </p>
     </section>
 
-    <!-- ───── 02 Problem ───── -->
-    <section class="page" id="page-problem">
+    <!-- ───── 02 Engineering Design ───── -->
+    <section class="page" id="page-engineering">
       <div class="page-header">
-        <div class="page-num">02 · The Problem</div>
-        <h1 class="page-title">Commercial wearables count steps. None prevent injuries.</h1>
+        <div class="page-num">02 · Engineering Design</div>
+        <h1 class="page-title">7 sensors, one microcontroller, and a classification brain.</h1>
         <p class="page-sub">
-          Over half a million weightlifting injuries happen in the US each year — many of them preventable with earlier fatigue detection. But smartwatches weren't designed for strength training, and medical-grade monitors cost more than a car and stay in clinical labs.
-        </p>
-      </div>
-
-      <div class="cards-3">
-        <div class="card">
-          <div class="stat-big red">530K<span class="unit">/year</span></div>
-          <div class="card-title" style="margin-top: 10px;">Injuries in the US</div>
-          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-            Weightlifting injuries treated annually. Most occur when the lifter crosses the fatigue threshold without realizing it.
-          </p>
-        </div>
-        <div class="card">
-          <div class="stat-big">3</div>
-          <div class="card-title" style="margin-top: 10px;">Sensors on Apple Watch</div>
-          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-            Heart rate, accelerometer, SpO₂. Nothing measuring muscle force, joint angle, or the onset of fatigue.
-          </p>
-        </div>
-        <div class="card">
-          <div class="stat-big">$5K+</div>
-          <div class="card-title" style="margin-top: 10px;">Clinical EMG setup</div>
-          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-            Gold-standard muscle monitoring exists, but only in research labs — never in the gym where it's needed most.
-          </p>
-        </div>
-      </div>
-
-      <h2 class="sub">What's missing</h2>
-      <p class="lead">
-        The gap isn't technology — it's integration. No existing wearable combines muscle force sensing, joint kinematics, and physiological monitoring into a single affordable package that classifies activity in real time. IMSES is a proof-of-concept that you can close this gap with off-the-shelf sensors and thoughtful engineering.
-      </p>
-    </section>
-
-    <!-- ───── 03 Solution ───── -->
-    <section class="page" id="page-solution">
-      <div class="page-header">
-        <div class="page-num">03 · The Solution</div>
-        <h1 class="page-title">A soft elbow pad with 7 sensors and a classification brain.</h1>
-        <p class="page-sub">
-          Seven biosensors stream to a Seeed XIAO nRF52840 Sense microcontroller, which runs a three-tier classification algorithm and broadcasts results over Bluetooth at 10 Hz.
+          Seven biosensors stream to a Seeed XIAO nRF52840 Sense microcontroller, which runs a three-tier classification algorithm and broadcasts results over Bluetooth Low Energy at 10 Hz.
         </p>
       </div>
 
@@ -829,39 +789,39 @@
         </div>
       </div>
 
-      <h2 class="sub">Sensors</h2>
+      <h2 class="sub">Sensor array</h2>
       <div class="sensors-table">
         <div class="sensors-head">
           <span>Sym</span><span>Measurement</span><span>Range</span><span>Unit</span><span>Hardware</span>
         </div>
         <div class="sensor-row"><span class="s-sym">T</span><span class="s-name">Skin temperature</span><span class="s-range">28–38</span><span class="s-unit">°C</span><span class="s-hw">NTC 10kΩ thermistor</span></div>
         <div class="sensor-row"><span class="s-sym">θ</span><span class="s-name">Elbow flex angle</span><span class="s-range">0–150</span><span class="s-unit">°</span><span class="s-hw">Flex Sensor 2.2"</span></div>
-        <div class="sensor-row"><span class="s-sym">ω</span><span class="s-name">Angular velocity</span><span class="s-range">0–300</span><span class="s-unit">°/s</span><span class="s-hw">IMU LSM6DS3</span></div>
-        <div class="sensor-row"><span class="s-sym">SpO₂</span><span class="s-name">Blood oxygen</span><span class="s-range">88–100</span><span class="s-unit">%</span><span class="s-hw">MAX30102</span></div>
+        <div class="sensor-row"><span class="s-sym">ω</span><span class="s-name">Angular velocity</span><span class="s-range">0–300</span><span class="s-unit">°/s</span><span class="s-hw">IMU LSM6DS3 (built-in)</span></div>
+        <div class="sensor-row"><span class="s-sym">SpO₂</span><span class="s-name">Blood oxygen saturation</span><span class="s-range">88–100</span><span class="s-unit">%</span><span class="s-hw">MAX30102</span></div>
         <div class="sensor-row"><span class="s-sym">HR</span><span class="s-name">Heart rate</span><span class="s-range">55–180</span><span class="s-unit">bpm</span><span class="s-hw">MAX30102</span></div>
-        <div class="sensor-row"><span class="s-sym">G</span><span class="s-name">Skin conductance</span><span class="s-range">1–100</span><span class="s-unit">µS</span><span class="s-hw">Silver electrodes</span></div>
-        <div class="sensor-row"><span class="s-sym">F</span><span class="s-name">Muscle force</span><span class="s-range">0–100</span><span class="s-unit">N</span><span class="s-hw">FSR 402</span></div>
+        <div class="sensor-row"><span class="s-sym">G</span><span class="s-name">Skin conductance (sweat)</span><span class="s-range">1–100</span><span class="s-unit">µS</span><span class="s-hw">Silver electrodes</span></div>
+        <div class="sensor-row"><span class="s-sym">F</span><span class="s-name">Muscle contraction force</span><span class="s-range">0–100</span><span class="s-unit">N</span><span class="s-hw">FSR 402</span></div>
       </div>
 
-      <h2 class="sub">Behavior classification</h2>
+      <h2 class="sub">Behavior classification algorithm</h2>
       <p class="lead" style="margin-bottom: 16px;">
-        A three-tier decision tree uses angular velocity as the primary discriminator, with sub-classification by heart rate, joint angle, or muscle force. Safety alerts override everything.
+        A three-tier decision tree uses angular velocity (ω) as the primary discriminator, with sub-classification by heart rate, joint angle pattern, or muscle force. Safety alerts take highest priority and override all other classifications.
       </p>
 
       <div class="behavior-tree">
         <div class="tree-level safety">
-          <div class="tree-label">Tier 0 · Safety override (checked first)</div>
+          <div class="tree-label">Priority 0 · Safety override (checked first)</div>
           <div class="tree-branches">
-            <div class="tree-branch"><div class="tree-branch-cond">SpO₂ &lt; 93%</div><div class="tree-branch-name">⚠ Low oxygen</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">SpO₂ &lt; 93%</div><div class="tree-branch-name">⚠ Low oxygen alert</div></div>
             <div class="tree-branch"><div class="tree-branch-cond">ω drop 100→20 in 3s</div><div class="tree-branch-name">⚠ Fatigue warning</div></div>
           </div>
         </div>
         <div class="tree-level">
-          <div class="tree-label">Tier 1 · Primary split by angular velocity</div>
+          <div class="tree-label">Tier 1 · Primary classification by angular velocity</div>
           <div class="tree-branches">
-            <div class="tree-branch"><div class="tree-branch-cond">ω &lt; 15°/s</div><div class="tree-branch-name">A · Static</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">15 ≤ ω &lt; 100°/s</div><div class="tree-branch-name">B · Daily</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">ω ≥ 100°/s</div><div class="tree-branch-name">C · Exercise</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">ω &lt; 15°/s</div><div class="tree-branch-name">Group A · Static</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">15 ≤ ω &lt; 100°/s</div><div class="tree-branch-name">Group B · Daily activity</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">ω ≥ 100°/s</div><div class="tree-branch-name">Group C · Exercise</div></div>
           </div>
         </div>
         <div class="tree-level">
@@ -869,12 +829,75 @@
           <div class="tree-branches">
             <div class="tree-branch"><div class="tree-branch-cond">A · HR &lt; 68</div><div class="tree-branch-name">😴 Sleeping</div></div>
             <div class="tree-branch"><div class="tree-branch-cond">A · HR ≥ 68</div><div class="tree-branch-name">🪑 Resting</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">B · θ stable</div><div class="tree-branch-name">💻 Office</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">B · θ stable 70–100°</div><div class="tree-branch-name">💻 Office / Typing</div></div>
             <div class="tree-branch"><div class="tree-branch-cond">B · ω rhythmic</div><div class="tree-branch-name">🚶 Walking</div></div>
             <div class="tree-branch"><div class="tree-branch-cond">B · else</div><div class="tree-branch-name">🍜 Eating</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">C · F &lt; 25N</div><div class="tree-branch-name">🏃 Aerobic</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">C · F ≥ 25N</div><div class="tree-branch-name">🏋️ Strength</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">C · F &lt; 25 N</div><div class="tree-branch-name">🏃 Aerobic exercise</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">C · F ≥ 25 N</div><div class="tree-branch-name">🏋️ Strength training</div></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── 03 Motivation & Novelty ───── -->
+    <section class="page" id="page-novelty">
+      <div class="page-header">
+        <div class="page-num">03 · Motivation & Novelty</div>
+        <h1 class="page-title">Why this project exists, and what makes it different.</h1>
+      </div>
+
+      <h2 class="sub">The problem</h2>
+      <p class="lead">
+        Over 530,000 weightlifting injuries occur in the US annually, many caused by loading past the fatigue threshold without warning. Commercial wearables like the Apple Watch carry only 3 sensors (heart rate, accelerometer, SpO₂) — none measuring muscle force, joint angle, or real fatigue onset. Clinical-grade EMG rigs that can detect these signals cost upwards of $5,000 and are confined to research labs. There is no affordable, wearable device that monitors both biomechanical and physiological signals during strength training and provides real-time safety feedback.
+      </p>
+
+      <div class="cards-3">
+        <div class="card">
+          <div class="stat-big red">530K<span class="unit">/yr</span></div>
+          <div class="card-title" style="margin-top: 10px;">Weightlifting injuries</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Annual injuries in the US alone. Most occur at the fatigue threshold — exactly when feedback is needed most.
+          </p>
+        </div>
+        <div class="card">
+          <div class="stat-big">3</div>
+          <div class="card-title" style="margin-top: 10px;">Sensors on a smartwatch</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Heart rate, accelerometer, SpO₂. No muscle force, no joint kinematics, no fatigue detection.
+          </p>
+        </div>
+        <div class="card">
+          <div class="stat-big">$5K+</div>
+          <div class="card-title" style="margin-top: 10px;">Clinical EMG setup</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Gold-standard muscle monitoring exists — but only in labs, never in the gym where it's needed.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="sub">What makes IMSES novel</h2>
+      <p class="lead" style="margin-bottom: 18px;">
+        IMSES addresses this gap not through a single technological breakthrough, but through the <strong>integration of seven complementary sensing modalities</strong> into a single wearable form factor — an elbow sleeve — with on-device behavior classification. Three aspects distinguish this work:
+      </p>
+
+      <div class="cards-3">
+        <div class="card">
+          <div class="card-title">Multi-modal sensor fusion</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Unlike single-signal devices, IMSES fuses physiological signals (HR, SpO₂, temperature, skin conductance) with mechanical signals (flex angle, angular velocity, muscle force) to achieve behavior classification that neither modality can accomplish alone.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title">Real-time edge classification</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            The three-tier decision tree runs entirely on the nRF52840 microcontroller at 10 Hz — no cloud, no phone dependency, no latency. Classification happens at the edge, enabling sub-second safety alerts during exercise.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title">Accessible & open design</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Built entirely from off-the-shelf components (total hardware cost under $50), with an open-source web dashboard that connects via Web Bluetooth — no app store, no backend, no subscription. Designed to be reproducible by other researchers.
+          </p>
         </div>
       </div>
     </section>
