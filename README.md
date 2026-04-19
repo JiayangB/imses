@@ -44,6 +44,6 @@ IMSES is an intelligent multi-sensor elbow sleeve with 5 biosensors and a motor 
 
 ## Author
 
-**Jiayang** — High school researcher
+**Jiayang Bai** — High school researcher
 
 Physics · Engineering · Robotics · AI
