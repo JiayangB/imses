@@ -2,7 +2,7 @@
 
 A wearable health monitoring system that combines physics, bioengineering, and computer science to classify human behaviors and prevent injuries during strength training.
 
-**[View the project website →](https://imses-jiyang.netlify.app/)**
+**[View the project website →](https://imses-jiayang.netlify.app/)**
 
 ## Overview
 
@@ -40,7 +40,7 @@ IMSES is an intelligent multi-sensor elbow sleeve with 5 biosensors and a motor 
 - **Hardware**: Seeed XIAO nRF52840 Sense, custom sensor array, motor actuator
 - **Firmware**: C++ / Arduino
 - **App**: React + TypeScript, Web Bluetooth API, Web Serial API
-- **Website**: [imses-jiyang.netlify.app](https://imses-jiyang.netlify.app/)
+- **Website**: [imses-jiayang.netlify.app](https://imses-jiayang.netlify.app/)
 
 ## Author
 
