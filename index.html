@@ -662,7 +662,7 @@
       <div class="side-section-label">Project</div>
       <button class="nav-item active" data-page="overview">
         <span class="nav-icon">◎</span>
-        <span>Overview</span>
+        <span>Overview & Prototype</span>
         <span class="nav-num">01</span>
       </button>
       <button class="nav-item" data-page="engineering">
@@ -685,6 +685,11 @@
         <span>The App</span>
         <span class="nav-num">05</span>
       </button>
+      <button class="nav-item" data-page="future">
+        <span class="nav-icon">◇</span>
+        <span>Future Development</span>
+        <span class="nav-num">06</span>
+      </button>
     </div>
 
     <div class="side-section">
@@ -692,12 +697,12 @@
       <button class="nav-item" data-page="about">
         <span class="nav-icon">◉</span>
         <span>About Me</span>
-        <span class="nav-num">06</span>
+        <span class="nav-num">07</span>
       </button>
       <button class="nav-item" data-page="contact">
         <span class="nav-icon">◐</span>
         <span>Contact</span>
-        <span class="nav-num">07</span>
+        <span class="nav-num">08</span>
       </button>
     </div>
 
@@ -715,7 +720,7 @@
     <!-- ───── 01 Overview ───── -->
     <section class="page active" id="page-overview">
       <div class="overview-hero">
-        <div class="page-num">01 · Overview</div>
+        <div class="page-num">01 · Overview & Prototype</div>
         <h1>A wearable that knows when your body is <em>about to fail</em>.</h1>
         <p class="lead">
           IMSES is an intelligent multi-sensor elbow sleeve with <strong>5 biosensors and a motor actuator</strong> that classifies human behaviors in real time and warns users before fatigue causes injury. It bridges the gap between consumer fitness trackers and clinical monitoring.
@@ -755,8 +760,36 @@
       </div>
 
       <h2 class="sub">Project at a glance</h2>
-      <p class="lead" style="margin-bottom: 12px;">
+      <p class="lead" style="margin-bottom: 32px;">
         This research project combines three disciplines into a single wearable: the <strong>physics</strong> of sensor transduction, the <strong>bioengineering</strong> of physiological signal interpretation, and the <strong>computer science</strong> of real-time classification and wireless communication. Navigate to any section to see the details — each page stands on its own.
+      </p>
+
+      <h2 class="sub">Prototype</h2>
+      <div class="cards-3">
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 48px; margin-bottom: 12px;">🦾</div>
+          <div class="card-title">The Sleeve</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Soft elbow sleeve embedded with 5 sensors and a motor actuator. Comfortable enough for extended gym sessions.
+          </p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 48px; margin-bottom: 12px;">🔌</div>
+          <div class="card-title">The Board</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Seeed XIAO nRF52840 Sense with custom wiring harness. EMG, NTC, IMU, MAX30102, and flex sensor all connected via analog and I²C.
+          </p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 48px; margin-bottom: 12px;">📱</div>
+          <div class="card-title">The Dashboard</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Web app connects over Bluetooth. Real-time sensor display, behavior classification, and safety alerts — all in the browser.
+          </p>
+        </div>
+      </div>
+      <p style="color: var(--text-faint); font-size: 12px; margin-top: 12px; font-style: italic;">
+        Prototype photos coming soon. Add your own images by replacing the emoji cards above.
       </p>
     </section>
 
@@ -1032,10 +1065,74 @@ V_filtered = <span class="var">bandpass</span>(V_raw, 20 Hz, 450 Hz)
       </div>
     </section>
 
-    <!-- ───── 06 About ───── -->
+    <!-- ───── 06 Future Development ───── -->
+    <section class="page" id="page-future">
+      <div class="page-header">
+        <div class="page-num">06 · Future Development</div>
+        <h1 class="page-title">Where IMSES goes from here.</h1>
+        <p class="page-sub">
+          The current prototype demonstrates the core concept — multi-modal sensing with real-time classification. Several planned improvements would bring IMSES closer to a deployable system.
+        </p>
+      </div>
+
+      <h2 class="sub">Additional sensors</h2>
+      <p class="lead" style="margin-bottom: 16px;">
+        Two sensor modalities were explored during the design phase but not included in the current prototype due to time and integration constraints. Both remain strong candidates for the next revision.
+      </p>
+
+      <div class="cards-3">
+        <div class="card">
+          <div class="card-title">Force-sensitive resistor (FSR)</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            An FSR 402 was tested for direct muscle contraction force measurement. While the sensor worked in isolation, integrating it into the sleeve fabric without affecting comfort and signal quality proved challenging. A future revision with a custom flexible PCB could solve this.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title">Galvanic skin response (GSR)</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Silver electrode pairs for measuring skin conductance (sweat response) were prototyped for stress and exertion detection. Electrode contact reliability during dynamic movement needs further work — a conductive fabric electrode design is planned.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title">Heart rate via MAX30102</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            The MAX30102 currently provides SpO₂. Extracting reliable heart rate from the elbow position (vs. fingertip or wrist) requires additional signal processing work — peak detection algorithms optimized for lower perfusion sites.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="sub">Engineering improvements</h2>
+      <div class="cards-3">
+        <div class="card">
+          <div class="card-title">Custom flexible PCB</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            Replace the current breadboard wiring with a thin, flexible PCB that conforms to the elbow's curvature. This would improve reliability, reduce bulk, and enable additional sensor placement.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title">Machine learning classification</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            The current rule-based decision tree works well for the defined behavior set. A future version could train a lightweight neural network (e.g., TensorFlow Lite Micro) on collected data to improve accuracy and detect nuanced patterns.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-title">Closed-loop motor control</div>
+          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+            The motor actuator currently provides haptic feedback. Future work aims to implement closed-loop control — where the motor actively assists or resists motion based on detected fatigue level, creating a truly adaptive system.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="sub">Long-term vision</h2>
+      <p class="lead">
+        IMSES is a proof-of-concept for a broader idea: that affordable, multi-modal wearable devices can bring clinical-grade physiological monitoring into everyday environments. The same sensor fusion and classification approach could be applied to other joints (knee, shoulder, wrist), other activities (physical therapy, rehabilitation), and other users (elderly fall detection, workplace ergonomics). The physics doesn't change — only the form factor and the classification rules.
+      </p>
+    </section>
+
+    <!-- ───── 07 About Me ───── -->
     <section class="page" id="page-about">
       <div class="page-header">
-        <div class="page-num">06 · About</div>
+        <div class="page-num">07 · About Me</div>
         <h1 class="page-title">Why I built this.</h1>
       </div>
 
@@ -1072,7 +1169,7 @@ V_filtered = <span class="var">bandpass</span>(V_raw, 20 Hz, 450 Hz)
     <!-- ───── 07 Contact ───── -->
     <section class="page" id="page-contact">
       <div class="page-header">
-        <div class="page-num">07 · Contact</div>
+        <div class="page-num">08 · Contact</div>
         <h1 class="page-title">Let's talk.</h1>
         <p class="page-sub">
           Try the live demo in your browser, read the source code, or get in touch directly. I'd love to hear what you think.
