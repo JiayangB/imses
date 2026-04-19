@@ -718,7 +718,7 @@
         <div class="page-num">01 · Overview</div>
         <h1>A wearable that knows when your body is <em>about to fail</em>.</h1>
         <p class="lead">
-          IMSES is a intelligent multi-sensor elbow sleeve with <strong>7 biosensors</strong> that classifies <strong>8 human behaviors</strong> in real time and warns users before fatigue causes injury. It bridges the gap between consumer fitness trackers and clinical monitoring.
+          IMSES is an intelligent multi-sensor elbow sleeve with <strong>5 biosensors and a motor actuator</strong> that classifies human behaviors in real time and warns users before fatigue causes injury. It bridges the gap between consumer fitness trackers and clinical monitoring.
         </p>
         <div class="actions">
           <button class="btn btn-primary btn-arrow" onclick="goto('engineering')">Explore the project</button>
@@ -733,7 +733,7 @@
         </div>
         <div class="key-fact">
           <div class="key-fact-label">Sensors</div>
-          <div class="key-fact-value">7 channels · 10 Hz</div>
+          <div class="key-fact-value">5 sensors + motor · 10 Hz</div>
         </div>
         <div class="key-fact">
           <div class="key-fact-label">Interface</div>
@@ -772,12 +772,12 @@
 
       <div class="stat-row">
         <div class="stat-card">
-          <div class="stat-big">7</div>
+          <div class="stat-big">5</div>
           <div class="stat-label">Biosensors</div>
         </div>
         <div class="stat-card">
-          <div class="stat-big">8</div>
-          <div class="stat-label">Behaviors</div>
+          <div class="stat-big">1</div>
+          <div class="stat-label">Motor actuator</div>
         </div>
         <div class="stat-card">
           <div class="stat-big">10<span class="unit">Hz</span></div>
@@ -794,13 +794,19 @@
         <div class="sensors-head">
           <span>Sym</span><span>Measurement</span><span>Range</span><span>Unit</span><span>Hardware</span>
         </div>
+        <div class="sensor-row"><span class="s-sym">EMG</span><span class="s-name">Muscle electrical activity</span><span class="s-range">0–5</span><span class="s-unit">mV</span><span class="s-hw">EMG sensor module</span></div>
         <div class="sensor-row"><span class="s-sym">T</span><span class="s-name">Skin temperature</span><span class="s-range">28–38</span><span class="s-unit">°C</span><span class="s-hw">NTC 10kΩ thermistor</span></div>
-        <div class="sensor-row"><span class="s-sym">θ</span><span class="s-name">Elbow flex angle</span><span class="s-range">0–150</span><span class="s-unit">°</span><span class="s-hw">Flex Sensor 2.2"</span></div>
         <div class="sensor-row"><span class="s-sym">ω</span><span class="s-name">Angular velocity</span><span class="s-range">0–300</span><span class="s-unit">°/s</span><span class="s-hw">IMU LSM6DS3 (built-in)</span></div>
         <div class="sensor-row"><span class="s-sym">SpO₂</span><span class="s-name">Blood oxygen saturation</span><span class="s-range">88–100</span><span class="s-unit">%</span><span class="s-hw">MAX30102</span></div>
-        <div class="sensor-row"><span class="s-sym">HR</span><span class="s-name">Heart rate</span><span class="s-range">55–180</span><span class="s-unit">bpm</span><span class="s-hw">MAX30102</span></div>
-        <div class="sensor-row"><span class="s-sym">G</span><span class="s-name">Skin conductance (sweat)</span><span class="s-range">1–100</span><span class="s-unit">µS</span><span class="s-hw">Silver electrodes</span></div>
-        <div class="sensor-row"><span class="s-sym">F</span><span class="s-name">Muscle contraction force</span><span class="s-range">0–100</span><span class="s-unit">N</span><span class="s-hw">FSR 402</span></div>
+        <div class="sensor-row"><span class="s-sym">θ</span><span class="s-name">Elbow flex angle</span><span class="s-range">0–150</span><span class="s-unit">°</span><span class="s-hw">Flex sensor 2.2"</span></div>
+      </div>
+
+      <h2 class="sub">Actuator</h2>
+      <div class="sensors-table">
+        <div class="sensors-head">
+          <span>Sym</span><span>Component</span><span>Function</span><span></span><span>Hardware</span>
+        </div>
+        <div class="sensor-row"><span class="s-sym">M</span><span class="s-name">Motor</span><span class="s-range">Haptic feedback & assisted motion</span><span class="s-unit"></span><span class="s-hw">DC motor / servo</span></div>
       </div>
 
       <h2 class="sub">Behavior classification algorithm</h2>
@@ -832,8 +838,8 @@
             <div class="tree-branch"><div class="tree-branch-cond">B · θ stable 70–100°</div><div class="tree-branch-name">💻 Office / Typing</div></div>
             <div class="tree-branch"><div class="tree-branch-cond">B · ω rhythmic</div><div class="tree-branch-name">🚶 Walking</div></div>
             <div class="tree-branch"><div class="tree-branch-cond">B · else</div><div class="tree-branch-name">🍜 Eating</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">C · F &lt; 25 N</div><div class="tree-branch-name">🏃 Aerobic exercise</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">C · F ≥ 25 N</div><div class="tree-branch-name">🏋️ Strength training</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">C · EMG low</div><div class="tree-branch-name">🏃 Aerobic exercise</div></div>
+            <div class="tree-branch"><div class="tree-branch-cond">C · EMG high</div><div class="tree-branch-name">🏋️ Strength training</div></div>
           </div>
         </div>
       </div>
@@ -884,7 +890,7 @@
         <div class="card">
           <div class="card-title">Multi-modal sensor fusion</div>
           <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-            Unlike single-signal devices, IMSES fuses physiological signals (HR, SpO₂, temperature, skin conductance) with mechanical signals (flex angle, angular velocity, muscle force) to achieve behavior classification that neither modality can accomplish alone.
+            Unlike single-signal devices, IMSES fuses physiological signals (SpO₂, temperature, EMG) with kinematic signals (flex angle, angular velocity) to achieve behavior classification that neither modality can accomplish alone.
           </p>
         </div>
         <div class="card">
@@ -938,14 +944,15 @@ T<sub>°C</sub> = T<sub>K</sub> − 273.15
       </div>
 
       <div class="formula-card">
-        <div class="formula-title">Muscle force · FSR squared conductance</div>
-        <div class="formula-subtitle">Interlink FSR 402 (0.5" diameter)</div>
-<pre class="formula-math">R_FSR = 10000 × (V_cc / V_out − 1)
-<span class="var">F</span> = (10000 / R_FSR)²
+        <div class="formula-title">EMG · Muscle electrical activity</div>
+        <div class="formula-subtitle">Surface electromyography signal processing</div>
+<pre class="formula-math">V_raw = ADC × (3.3 / 4096)
+V_filtered = <span class="var">bandpass</span>(V_raw, 20 Hz, 450 Hz)
+<span class="var">RMS</span> = √(Σ V_filtered² / N)
 
-<span class="comment">// Force in newtons, calibrated 0–100 N</span></pre>
+<span class="comment">// RMS envelope in mV, window N = 50 samples</span></pre>
         <p class="formula-desc">
-          Force-sensitive resistors have a roughly logarithmic response to applied force. Squaring the conductance (1/R) produces a linear-in-force reading over the calibrated range.
+          Raw EMG signals are bandpass-filtered to isolate muscle activation frequencies (20–450 Hz), then converted to an RMS envelope that represents contraction intensity. Higher RMS indicates stronger muscle engagement.
         </p>
       </div>
 
@@ -975,11 +982,11 @@ T<sub>°C</sub> = T<sub>K</sub> − 273.15
       <div class="app-showcase">
         <h3>Live sensor streaming, behavior detection, and safety alerts</h3>
         <p>
-          Open the dashboard, tap Connect, and the elbow pad streams 7 channels at 10 Hz. Real-time gauges, behavior classification badge, safety override alerts, and live joint torque — everything visible at a glance during training.
+          Open the dashboard, tap Connect, and the elbow sleeve streams 5 sensor channels at 10 Hz. Real-time gauges, behavior classification, safety override alerts, and joint torque analysis — everything visible at a glance during training.
         </p>
         <div class="app-features">
           <div class="app-feat">Web Bluetooth pairing (no app store)</div>
-          <div class="app-feat">7 live sensor gauges with sparklines</div>
+          <div class="app-feat">5 live sensor gauges with sparklines</div>
           <div class="app-feat">Behavior timeline history</div>
           <div class="app-feat">Safety override alerts (SpO₂, fatigue)</div>
           <div class="app-feat">Real-time joint torque risk analysis</div>
@@ -1006,9 +1013,9 @@ T<sub>°C</sub> = T<sub>K</sub> − 273.15
               <div class="app-mock-g-unit">bpm</div>
             </div>
             <div class="app-mock-g">
-              <div class="app-mock-g-label">Force</div>
-              <div class="app-mock-g-value mono"><span id="mock-f">65</span></div>
-              <div class="app-mock-g-unit">N</div>
+              <div class="app-mock-g-label">EMG</div>
+              <div class="app-mock-g-value mono"><span id="mock-f">2.4</span></div>
+              <div class="app-mock-g-unit">mV</div>
             </div>
             <div class="app-mock-g">
               <div class="app-mock-g-label">Angle</div>
@@ -1038,21 +1045,23 @@ T<sub>°C</sub> = T<sub>K</sub> − 273.15
           <h3>Jiayang</h3>
           <div class="about-role">High school researcher · Founder, engineer, and designer of IMSES</div>
           <p>
-            I built IMSES because I wanted to understand how the body's signals become data, and how data can become a warning that prevents injury. This project combines everything I love — the physics of how a thermistor responds to heat, the biomechanics of joint torque, and the software engineering of making it all work in real time on a tiny ARM chip.
+            I'm a high school student passionate about physics — not just the equations on a chalkboard, but physics applied to real systems. IMSES started as a question: can the same principles I learn in class — thermodynamics, electromagnetism, kinematics — be used to build something that actually protects people during exercise?
           </p>
           <p>
-            The hardware is a Seeed XIAO nRF52840 Sense wired to seven sensors. The firmware is C++ running on the nRF52. The dashboard is React and TypeScript talking to the device over Web Bluetooth. I wrote every formula, soldered every wire, and tested every classification rule.
+            The answer became this project. I used the Steinhart–Hart equation to convert thermistor resistance into skin temperature. I applied signal processing to extract muscle activation from raw EMG. I wrote the firmware in C++ on an ARM Cortex-M4, the dashboard in React and TypeScript over Web Bluetooth, and designed the classification algorithm from first principles. Every formula, every solder joint, every line of code is mine.
           </p>
           <p>
-            I'm applying to universities to study biomedical engineering, where I hope to keep building devices that close the gap between consumer wearables and clinical monitoring.
+            I'm applying to study physics, where I want to keep working at the intersection of fundamental science and engineering — particularly robotics and AI. I believe the most impactful physics happens when theory leaves the textbook and enters a device someone can actually wear.
           </p>
           <div class="about-skills">
+            <span class="skill">Physics</span>
             <span class="skill">C++ / Arduino</span>
             <span class="skill">React / TypeScript</span>
             <span class="skill">Circuit design</span>
             <span class="skill">BLE / GATT</span>
-            <span class="skill">Biomechanics</span>
-            <span class="skill">Signal processing</span>
+            <span class="skill">EMG signal processing</span>
+            <span class="skill">Robotics</span>
+            <span class="skill">AI / Classification</span>
             <span class="skill">PCB prototyping</span>
             <span class="skill">3D printing</span>
           </div>
@@ -1111,13 +1120,13 @@ document.querySelectorAll('.nav-item').forEach(btn => {
 
 // ── Mock app animation ──────────────────────────
 const presets = [
-  { name: 'Sleeping',          emoji: '😴', color: '#6366f1', hr: 55,  f: 2,  theta: 20  },
-  { name: 'Resting',           emoji: '🪑', color: '#818cf8', hr: 72,  f: 5,  theta: 90  },
-  { name: 'Office / Typing',   emoji: '💻', color: '#22d3ee', hr: 78,  f: 10, theta: 85  },
-  { name: 'Eating',            emoji: '🍜', color: '#34d399', hr: 85,  f: 12, theta: 110 },
-  { name: 'Walking',           emoji: '🚶', color: '#a3e635', hr: 95,  f: 18, theta: 95  },
-  { name: 'Aerobic Exercise',  emoji: '🏃', color: '#fbbf24', hr: 140, f: 20, theta: 100 },
-  { name: 'Strength Training', emoji: '🏋️', color: '#f97316', hr: 155, f: 65, theta: 120 },
+  { name: 'Sleeping',          emoji: '😴', color: '#6366f1', hr: 55,  f: 0.1, theta: 20  },
+  { name: 'Resting',           emoji: '🪑', color: '#818cf8', hr: 72,  f: 0.3, theta: 90  },
+  { name: 'Office / Typing',   emoji: '💻', color: '#22d3ee', hr: 78,  f: 0.5, theta: 85  },
+  { name: 'Eating',            emoji: '🍜', color: '#34d399', hr: 85,  f: 0.6, theta: 110 },
+  { name: 'Walking',           emoji: '🚶', color: '#a3e635', hr: 95,  f: 0.8, theta: 95  },
+  { name: 'Aerobic Exercise',  emoji: '🏃', color: '#fbbf24', hr: 140, f: 1.2, theta: 100 },
+  { name: 'Strength Training', emoji: '🏋️', color: '#f97316', hr: 155, f: 3.8, theta: 120 },
 ];
 let pi = 6, frame = 0;
 function animateMock() {
@@ -1129,7 +1138,7 @@ function animateMock() {
   const lerp = (a, b) => a + (b - a) * ease + (Math.random() - 0.5) * a * 0.04;
 
   document.getElementById('mock-hr').textContent = Math.round(lerp(cur.hr, nxt.hr));
-  document.getElementById('mock-f').textContent = Math.round(lerp(cur.f, nxt.f));
+  document.getElementById('mock-f').textContent = lerp(cur.f, nxt.f).toFixed(1);
   document.getElementById('mock-theta').textContent = Math.round(lerp(cur.theta, nxt.theta));
   const F = lerp(cur.f, nxt.f), theta = lerp(cur.theta, nxt.theta);
   document.getElementById('mock-torque').textContent = (F * 0.27 * Math.sin(theta * Math.PI / 180)).toFixed(1);
