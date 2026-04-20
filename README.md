@@ -40,7 +40,7 @@ IMSES is an intelligent multi-sensor elbow sleeve with 5 biosensors and a motor 
 - **Hardware**: Seeed XIAO nRF52840 Sense, custom sensor array, motor actuator
 - **Firmware**: C++ / Arduino
 - **App**: React + TypeScript, Web Bluetooth API, Web Serial API
-- **Website**: [imses-jiayang.netlify.app](https://jiayangb.github.io/imses/)
+- **Website**: [jiayangb.github.io/imses](https://jiayangb.github.io/imses/)
 
 ## Author
 
