@@ -787,19 +787,24 @@
           </p>
         </div>
       </div>
-      <p style="color: var(--text-faint); font-size: 12px; margin-top: 12px; font-style: italic;">
-        Prototype photos coming soon. Add your own images by replacing the emoji cards above.
-      </p>
+      <h2 class="sub">System wiring</h2>
+      <div style="background: #111827; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 12px;">
+        <img src="assets/structure.png" alt="IMSES wiring diagram" style="width: 100%; display: block;">
+      </div>
     </section>
 
     <!-- ───── 02 Engineering Design ───── -->
     <section class="page" id="page-engineering">
       <div class="page-header">
         <div class="page-num">02 · Engineering Design</div>
-        <h1 class="page-title">7 sensors, one microcontroller, and a classification brain.</h1>
+        <h1 class="page-title">5 sensors, one microcontroller, and a classification brain.</h1>
         <p class="page-sub">
-          Seven biosensors stream to a Seeed XIAO nRF52840 Sense microcontroller, which runs a three-tier classification algorithm and broadcasts results over Bluetooth Low Energy at 10 Hz.
+          Five biosensors and a motor actuator stream to a Seeed XIAO nRF52840 Sense microcontroller, which runs a three-tier classification algorithm and broadcasts results over Bluetooth Low Energy at 10 Hz.
         </p>
+      </div>
+
+      <div style="background: var(--bg-alt); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 32px;">
+        <img src="assets/structure-schematic.jpg" alt="IMSES technical schematic — exploded view of smart elbow sleeve with embedded sensors" style="width: 100%; display: block;">
       </div>
 
       <div class="stat-row">
