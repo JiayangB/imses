@@ -530,7 +530,7 @@
         <div class="note" id="runtimeNote">
           Open this page from https or http://localhost with Chrome or Edge. Rapid-bend protection triggers when bend speed stays above 200 deg/s.
         </div>
-        <button class="secondary" style="width: 100%; margin-top: 10px;" onclick="toggleDemo('live')">🎮 Demo Mode</button>
+        <button class="secondary" style="width: 100%; margin-top: 10px;" onclick="toggleDemo('live')" id="live-demo-btn">Demo Mode</button>
       </aside>
     </section>
 
@@ -724,7 +724,7 @@
       <div style="padding: 16px;" id="daily-content">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
           <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em;">Today's Summary</h1>
-          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('daily')" id="daily-demo-btn">🎮 Demo</button>
+          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('daily')" id="daily-demo-btn">Demo</button>
         </div>
         <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="daily-status">Connect a device or enter Demo Mode to see data.</p>
 
@@ -780,7 +780,7 @@
       <div style="padding: 16px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
           <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em;">Weekly Overview</h1>
-          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('weekly')" id="weekly-demo-btn">🎮 Demo</button>
+          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('weekly')" id="weekly-demo-btn">Demo</button>
         </div>
         <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="weekly-status">Connect a device or enter Demo Mode to see data.</p>
 
@@ -831,7 +831,7 @@
       <div style="padding: 16px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
           <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em;">Personalized Feedback</h1>
-          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('feedback')" id="feedback-demo-btn">🎮 Demo</button>
+          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('feedback')" id="feedback-demo-btn">Demo</button>
         </div>
         <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="feedback-status">Connect a device or enter Demo Mode to see feedback.</p>
         <div id="feedback-items"></div>
@@ -1681,9 +1681,11 @@
     }
 
     function updateDemoButtons() {
-      ['daily', 'weekly', 'feedback'].forEach(tab => {
+      ['live', 'daily', 'weekly', 'feedback'].forEach(tab => {
         const btn = document.getElementById(tab + '-demo-btn');
-        if (btn) btn.textContent = tabDemoActive[tab] ? '⏹ Stop' : '🎮 Demo';
+        if (!btn) return;
+        const isOn = tab === 'live' ? demoActive : tabDemoActive[tab];
+        btn.textContent = isOn ? 'Stop Demo' : (tab === 'live' ? 'Demo Mode' : 'Demo');
       });
     }
 
