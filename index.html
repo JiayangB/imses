@@ -165,7 +165,8 @@
   .main {
     grid-column: 2;
     padding: 60px 60px 80px;
-    max-width: 900px;
+    max-width: 960px;
+    margin: 0 auto;
   }
 
   /* Page header */
@@ -636,6 +637,24 @@
     .page-title { font-size: 36px; }
     .stat-row { grid-template-columns: 1fr 1fr; }
   }
+
+  /* Image zoom modal */
+  .img-zoom { cursor: zoom-in; transition: opacity 0.15s; }
+  .img-zoom:hover { opacity: 0.9; }
+  .zoom-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0, 0, 0, 0.85);
+    justify-content: center; align-items: center;
+    cursor: zoom-out;
+    padding: 40px;
+  }
+  .zoom-overlay.open { display: flex; }
+  .zoom-overlay img {
+    max-width: 90vw; max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
 </style>
 </head>
 <body>
@@ -766,25 +785,33 @@
       </p>
 
       <h2 class="sub">Prototype</h2>
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px;">
         <div style="background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
-          <img src="assets/prototype-worn.jpg" alt="IMSES prototype worn on arm" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
+          <img src="assets/prototype-worn.jpg" alt="IMSES prototype worn on arm" class="img-zoom" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
           <p style="padding: 10px 14px; font-size: 12px; color: var(--text-muted); line-height: 1.5;">
             <strong style="color: var(--text);">Fig 1.</strong> The IMSES prototype worn on the arm. The sleeve houses all sensors and electronics in a comfortable, form-fitting design.
           </p>
         </div>
         <div style="background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
-          <img src="assets/prototype-electronics.jpg" alt="IMSES electronics and wiring" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
+          <img src="assets/prototype-electronics.jpg" alt="IMSES electronics and wiring" class="img-zoom" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
           <p style="padding: 10px 14px; font-size: 12px; color: var(--text-muted); line-height: 1.5;">
             <strong style="color: var(--text);">Fig 2.</strong> Inside view showing the XIAO nRF52840 microcontroller, sensor wiring harness, MAX30102 module, and battery compartment.
           </p>
         </div>
         <div style="background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
-          <img src="assets/prototype-outer.jpg" alt="IMSES sleeve construction" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
+          <img src="assets/prototype-outer.jpg" alt="IMSES sleeve construction" class="img-zoom" style="width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover;">
           <p style="padding: 10px 14px; font-size: 12px; color: var(--text-muted); line-height: 1.5;">
             <strong style="color: var(--text);">Fig 3.</strong> Outer construction showing wire routing channels, motor mounting, and the flex sensor integrated along the elbow joint.
           </p>
         </div>
+      </div>
+
+      <h2 class="sub">System schematic</h2>
+      <div style="background: #111827; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
+        <img src="assets/structure-handdrawn.png" alt="IMSES system schematic — sensor layout and wiring" class="img-zoom" style="width: 100%; display: block;">
+        <p style="padding: 10px 14px; font-size: 12px; color: #94a3b8; line-height: 1.5; background: #0f172a;">
+          <strong style="color: #e2e8f0;">Fig 4.</strong> System schematic showing sensor placement and wiring topology. Click to enlarge.
+        </p>
       </div>
     </section>
 
@@ -799,7 +826,7 @@
       </div>
 
       <div style="background: var(--bg-alt); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 32px;">
-        <img src="assets/structure-schematic.jpg" alt="IMSES technical schematic — exploded view of smart elbow sleeve with embedded sensors" style="width: 100%; display: block;">
+        <img src="assets/structure-schematic.jpg" alt="IMSES technical schematic — exploded view of smart elbow sleeve with embedded sensors" class="img-zoom" style="width: 100%; display: block;">
         <p style="padding: 10px 16px; font-size: 11px; color: #94a3b8; font-style: italic; background: #f8f9fb; border-top: 1px solid #e5e7eb;">
           This illustration was generated using AI based on our physical prototype. It contains minor errors in component representation.
         </p>
@@ -1351,6 +1378,20 @@ function animateMock() {
 }
 setInterval(animateMock, 100);
 animateMock();
+
+// ── Image zoom ─────────────────────────────────
+const zoomOverlay = document.createElement('div');
+zoomOverlay.className = 'zoom-overlay';
+zoomOverlay.innerHTML = '<img id="zoom-img" src="" alt="">';
+document.body.appendChild(zoomOverlay);
+zoomOverlay.addEventListener('click', () => zoomOverlay.classList.remove('open'));
+
+document.querySelectorAll('.img-zoom').forEach(img => {
+  img.addEventListener('click', () => {
+    document.getElementById('zoom-img').src = img.src;
+    zoomOverlay.classList.add('open');
+  });
+});
 </script>
 
 </body>
