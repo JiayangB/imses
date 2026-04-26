@@ -639,6 +639,7 @@
   /* Image zoom modal */
   .img-zoom { cursor: zoom-in; transition: opacity 0.15s; }
   .img-zoom:hover { opacity: 0.9; }
+  @keyframes mockPulse { 50% { opacity: 0.3; } }
   .zoom-overlay {
     display: none; position: fixed; inset: 0; z-index: 1000;
     background: rgba(0, 0, 0, 0.85);
@@ -777,19 +778,16 @@
         <div class="discipline">Signal Processing</div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; margin-bottom: 28px;">
-        <div>
-          <h2 class="sub" style="margin-top: 0;">Project at a glance</h2>
-          <p class="lead" style="margin-bottom: 0;">
-            This research project combines three disciplines into a single wearable: the <strong>physics</strong> of sensor transduction, the <strong>bioengineering</strong> of physiological signal interpretation, and the <strong>computer science</strong> of real-time classification and wireless communication. Navigate to any section to see the details.
-          </p>
-        </div>
-        <div style="background: #111827; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
-          <img src="assets/structure-handdrawn.png" alt="IMSES system schematic" class="img-zoom" style="width: 100%; display: block;">
-          <p style="padding: 8px 14px; font-size: 11px; color: #94a3b8; background: #0f172a;">
-            System schematic — sensor layout and wiring. Click to enlarge.
-          </p>
-        </div>
+      <h2 class="sub">Project at a glance</h2>
+      <p class="lead" style="margin-bottom: 24px;">
+        This research project combines three disciplines into a single wearable: the <strong>physics</strong> of sensor transduction, the <strong>bioengineering</strong> of physiological signal interpretation, and the <strong>computer science</strong> of real-time classification and wireless communication. Navigate to any section to see the details.
+      </p>
+
+      <div style="background: #111827; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; max-width: 640px; margin-bottom: 28px;">
+        <img src="assets/structure-handdrawn.png" alt="IMSES system schematic" class="img-zoom" style="width: 100%; display: block;">
+        <p style="padding: 10px 14px; font-size: 12px; color: #94a3b8; line-height: 1.5; background: #0f172a;">
+          <strong style="color: #e2e8f0;">Fig 4.</strong> System schematic showing sensor placement and wiring topology. Click to enlarge.
+        </p>
       </div>
 
       <h2 class="sub">Prototype</h2>
@@ -1211,11 +1209,46 @@ writeI16LE(vitalsPacket, 8, tempX100);</pre>
         </div>
         <a href="app.html" target="_blank" class="btn btn-primary btn-arrow">Launch live demo</a>
 
-        <div style="margin-top: 20px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 12px 40px rgba(0,0,0,0.1);">
-          <iframe src="app.html" style="width: 100%; height: 600px; border: none; display: block;"></iframe>
+        <div style="margin-top: 20px; background: #f7f2e7; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 12px 40px rgba(0,0,0,0.08); padding: 20px;">
+          <!-- Live animated sensor charts -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+            <div style="width: 10px; height: 10px; border-radius: 50%; background: #15735f; box-shadow: 0 0 6px #15735f; animation: mockPulse 1.5s infinite;"></div>
+            <span style="font-size: 12px; color: #65776f; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;">IMSES · Live sensor feed</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+            <div style="background: rgba(255,255,255,0.7); border-radius: 14px; padding: 16px; border: 1px solid rgba(17,33,28,0.08);">
+              <div style="font-size: 10px; color: #65776f; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Heart Rate</div>
+              <div style="font-size: 32px; font-weight: 700; letter-spacing: -0.03em; color: #11211c;" id="app-mock-hr">--</div>
+              <div style="font-size: 11px; color: #65776f;">BPM</div>
+              <canvas id="app-chart-hr" style="width: 100%; height: 50px; margin-top: 8px; border-radius: 8px; background: rgba(255,255,255,0.5);"></canvas>
+            </div>
+            <div style="background: rgba(255,255,255,0.7); border-radius: 14px; padding: 16px; border: 1px solid rgba(17,33,28,0.08);">
+              <div style="font-size: 10px; color: #65776f; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">SpO₂</div>
+              <div style="font-size: 32px; font-weight: 700; letter-spacing: -0.03em; color: #11211c;" id="app-mock-spo2">--</div>
+              <div style="font-size: 11px; color: #65776f;">%</div>
+              <canvas id="app-chart-spo2" style="width: 100%; height: 50px; margin-top: 8px; border-radius: 8px; background: rgba(255,255,255,0.5);"></canvas>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+            <div style="background: rgba(255,255,255,0.7); border-radius: 14px; padding: 14px; border: 1px solid rgba(17,33,28,0.08);">
+              <div style="font-size: 10px; color: #65776f; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">Temperature</div>
+              <div style="font-size: 24px; font-weight: 700; color: #11211c;" id="app-mock-temp">--</div>
+              <div style="font-size: 11px; color: #65776f;">°C</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.7); border-radius: 14px; padding: 14px; border: 1px solid rgba(17,33,28,0.08);">
+              <div style="font-size: 10px; color: #65776f; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">Elbow Angle</div>
+              <div style="font-size: 24px; font-weight: 700; color: #11211c;" id="app-mock-angle">--</div>
+              <div style="font-size: 11px; color: #65776f;">DEG</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.7); border-radius: 14px; padding: 14px; border: 1px solid rgba(17,33,28,0.08);">
+              <div style="font-size: 10px; color: #65776f; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">EMG Raw</div>
+              <div style="font-size: 24px; font-weight: 700; color: #11211c;" id="app-mock-emg">--</div>
+              <div style="font-size: 11px; color: #65776f;">ADC</div>
+            </div>
+          </div>
         </div>
         <p style="font-size: 12px; color: var(--text-faint); margin-top: 8px; text-align: center;">
-          Live interactive preview — click Demo Mode in the sidebar to see data flow. <a href="app.html" target="_blank" style="color: var(--accent);">Open full screen →</a>
+          Simulated sensor data — <a href="app.html" target="_blank" style="color: var(--accent);">open the full app →</a>
         </p>
       </div>
     </section>
@@ -1406,6 +1439,70 @@ function goto(pageId) {
 document.querySelectorAll('.nav-item').forEach(btn => {
   btn.addEventListener('click', () => goto(btn.dataset.page));
 });
+
+// ── App mock animation ──────────────────────────
+const mockHist = { hr: [], spo2: [] };
+const mockPresets = [
+  { hr: 72, spo2: 98, temp: 33.1, angle: 130, emg: 420 },
+  { hr: 95, spo2: 97, temp: 34.0, angle: 105, emg: 810 },
+  { hr: 140, spo2: 96, temp: 35.2, angle: 80, emg: 1650 },
+  { hr: 158, spo2: 95, temp: 36.1, angle: 55, emg: 3050 },
+  { hr: 165, spo2: 92, temp: 36.8, angle: 95, emg: 1300 },
+  { hr: 85, spo2: 98, temp: 33.5, angle: 150, emg: 350 },
+];
+let mpi = 0, mfr = 0;
+
+function drawMiniLine(canvasId, data, color, yMin, yMax) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const r = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const w = Math.floor(rect.width * r), h = Math.floor(rect.height * r);
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(r, 0, 0, r, 0, 0);
+  ctx.clearRect(0, 0, rect.width, rect.height);
+  if (data.length < 2) return;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  data.forEach((v, i) => {
+    const x = (i / (data.length - 1)) * rect.width;
+    const y = rect.height - ((v - yMin) / (yMax - yMin)) * (rect.height - 8) - 4;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+}
+
+function animateAppMock() {
+  mfr++;
+  const c = mockPresets[mpi], n = mockPresets[(mpi + 1) % mockPresets.length];
+  const t = (mfr % 80) / 80, ease = 0.5 - Math.cos(Math.PI * t) / 2;
+  const lerp = (a, b) => a + (b - a) * ease + (Math.random() - 0.5) * Math.max(a, 1) * 0.03;
+
+  const hr = lerp(c.hr, n.hr), spo2 = lerp(c.spo2, n.spo2);
+  const temp = lerp(c.temp, n.temp), angle = lerp(c.angle, n.angle);
+  const emg = lerp(c.emg, n.emg);
+
+  document.getElementById('app-mock-hr').textContent = Math.round(hr);
+  document.getElementById('app-mock-spo2').textContent = spo2.toFixed(1);
+  document.getElementById('app-mock-temp').textContent = temp.toFixed(1);
+  document.getElementById('app-mock-angle').textContent = Math.round(angle);
+  document.getElementById('app-mock-emg').textContent = Math.round(emg);
+
+  mockHist.hr.push(hr);
+  mockHist.spo2.push(spo2);
+  if (mockHist.hr.length > 80) mockHist.hr.shift();
+  if (mockHist.spo2.length > 80) mockHist.spo2.shift();
+
+  drawMiniLine('app-chart-hr', mockHist.hr, '#c0503b', 50, 180);
+  drawMiniLine('app-chart-spo2', mockHist.spo2, '#1f72ba', 88, 100);
+
+  if (mfr % 80 === 0) mpi = (mpi + 1) % mockPresets.length;
+}
+setInterval(animateAppMock, 100);
+animateAppMock();
 
 // ── Image zoom ─────────────────────────────────
 const zoomOverlay = document.createElement('div');
