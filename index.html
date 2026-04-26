@@ -976,6 +976,101 @@
         </div>
       </div>
 
+      <div style="background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px;">
+        <div style="padding: 14px 20px; background: var(--bg-alt); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+          Sensor Signatures — How all 5 variables shift across behaviors
+        </div>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px; min-width: 720px;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border);">
+                <th style="padding: 10px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Behavior</th>
+                <th style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--text-muted);">ω °/s</th>
+                <th style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--text-muted);">θ °</th>
+                <th style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--text-muted);">EMG mV</th>
+                <th style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--text-muted);">SpO₂ %</th>
+                <th style="padding: 10px 12px; text-align: center; font-size: 11px; color: var(--text-muted);">T °C</th>
+                <th style="padding: 10px 16px; text-align: left; font-size: 11px; color: var(--text-muted);">Signature pattern</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 9px 16px; font-weight: 500;">😴 Sleeping</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #257859;">↓ 2</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #257859;">↓ 20</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #257859;">↓ 0.1</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 97</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #257859;">↓ 32</td>
+                <td style="padding: 9px 16px; font-size: 11px; color: var(--text-muted);">Everything low — minimal movement, relaxed muscles, cool skin</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 9px 16px; font-weight: 500;">🪑 Resting</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #257859;">↓ 5</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 90</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #257859;">↓ 0.3</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 98</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 33</td>
+                <td style="padding: 9px 16px; font-size: 11px; color: var(--text-muted);">Still low ω like sleep, but θ at seated angle and higher baseline</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 9px 16px; font-weight: 500;">💻 Office</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 25</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #cb8320;">● 85</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 0.5</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 98</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 33</td>
+                <td style="padding: 9px 16px; font-size: 11px; color: var(--text-muted);">θ locked at typing angle (70–100°), low but non-zero ω from typing</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 9px 16px; font-weight: 500;">🚶 Walking</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #cb8320;">↗ 75</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 95</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 0.8</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 97</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #cb8320;">↗ 34</td>
+                <td style="padding: 9px 16px; font-size: 11px; color: var(--text-muted);">Rhythmic ω from arm swing, slight T rise from activity</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 9px 16px; font-weight: 500;">🏃 Aerobic</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #c0503b;">↑ 150</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 100</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 1.2</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #cb8320;">↘ 96</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #c0503b;">↑ 35</td>
+                <td style="padding: 9px 16px; font-size: 11px; color: var(--text-muted);">High ω but low EMG — fast movement without heavy muscle load</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 9px 16px; font-weight: 500;">🏋️ Strength</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #c0503b;">↑ 110</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #c0503b;">↑ 120</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #c0503b;">↑ 3.8</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #cb8320;">↘ 95</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #c0503b;">↑ 36</td>
+                <td style="padding: 9px 16px; font-size: 11px; color: var(--text-muted);">All sensors elevated — high ω, deep flex, strong EMG, hot, SpO₂ dropping</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 9px 16px; font-weight: 500; color: var(--danger);">⚠ Fatigue</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #257859;">↓↓ 10</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #65776f;">→ 90</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #cb8320;">↘ 1.5</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #c0503b;">↓ 92</td>
+                <td style="text-align: center; font-family: var(--font-head); color: #c0503b;">↑ 37</td>
+                <td style="padding: 9px 16px; font-size: 11px; color: var(--text-muted);">Sudden ω crash from high → low, SpO₂ drops, T still elevated — body giving up</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding: 10px 20px; background: var(--bg-alt); border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted);">
+          <span style="color: #c0503b;">↑</span> high &nbsp;
+          <span style="color: #cb8320;">↗</span> rising &nbsp;
+          <span style="color: #65776f;">→</span> baseline &nbsp;
+          <span style="color: #cb8320;">↘</span> declining &nbsp;
+          <span style="color: #257859;">↓</span> low &nbsp;
+          <span style="color: #cb8320;">●</span> key discriminator &nbsp;&nbsp;
+          Every behavior produces a unique 5-sensor fingerprint.
+        </div>
+      </div>
+
       <div class="behavior-tree">
         <div class="tree-level safety">
           <div class="tree-label">Priority 0 · Safety override (checked first)</div>
