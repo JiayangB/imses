@@ -1199,48 +1199,21 @@ writeI16LE(vitalsPacket, 8, tempX100);</pre>
         <div class="app-features">
           <div class="app-feat">Web Bluetooth pairing (no app store)</div>
           <div class="app-feat">5 live sensor gauges with sparklines</div>
-          <div class="app-feat">Behavior timeline history</div>
+          <div class="app-feat">Daily and weekly summaries</div>
           <div class="app-feat">Safety override alerts (SpO₂, fatigue)</div>
           <div class="app-feat">Real-time joint torque risk analysis</div>
-          <div class="app-feat">CSV session export</div>
+          <div class="app-feat">Personalized training feedback</div>
           <div class="app-feat">Mobile-first responsive design</div>
           <div class="app-feat">Demo mode (no hardware required)</div>
         </div>
         <a href="app.html" target="_blank" class="btn btn-primary btn-arrow">Launch live demo</a>
 
-        <div class="app-mock">
-          <div class="app-mock-head">
-            <div class="app-mock-dot"></div>
-            <div class="app-mock-title">IMSES · LIVE</div>
-          </div>
-          <div class="app-mock-label">Current Activity</div>
-          <div class="app-mock-beh">
-            <span id="mock-emoji">🏋️</span>
-            <span id="mock-beh">Strength Training</span>
-          </div>
-          <div class="app-mock-gauges">
-            <div class="app-mock-g">
-              <div class="app-mock-g-label">Heart Rate</div>
-              <div class="app-mock-g-value mono"><span id="mock-hr">155</span></div>
-              <div class="app-mock-g-unit">bpm</div>
-            </div>
-            <div class="app-mock-g">
-              <div class="app-mock-g-label">EMG</div>
-              <div class="app-mock-g-value mono"><span id="mock-f">2.4</span></div>
-              <div class="app-mock-g-unit">mV</div>
-            </div>
-            <div class="app-mock-g">
-              <div class="app-mock-g-label">Angle</div>
-              <div class="app-mock-g-value mono"><span id="mock-theta">120</span></div>
-              <div class="app-mock-g-unit">°</div>
-            </div>
-            <div class="app-mock-g">
-              <div class="app-mock-g-label">Torque</div>
-              <div class="app-mock-g-value mono"><span id="mock-torque">15.2</span></div>
-              <div class="app-mock-g-unit">N·m</div>
-            </div>
-          </div>
+        <div style="margin-top: 20px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 12px 40px rgba(0,0,0,0.1);">
+          <iframe src="app.html" style="width: 100%; height: 600px; border: none; display: block;"></iframe>
         </div>
+        <p style="font-size: 12px; color: var(--text-faint); margin-top: 8px; text-align: center;">
+          Live interactive preview — click Demo Mode in the sidebar to see data flow. <a href="app.html" target="_blank" style="color: var(--accent);">Open full screen →</a>
+        </p>
       </div>
     </section>
 
@@ -1430,41 +1403,6 @@ function goto(pageId) {
 document.querySelectorAll('.nav-item').forEach(btn => {
   btn.addEventListener('click', () => goto(btn.dataset.page));
 });
-
-// ── Mock app animation ──────────────────────────
-const presets = [
-  { name: 'Sleeping',          emoji: '😴', color: '#6366f1', hr: 55,  f: 0.1, theta: 20  },
-  { name: 'Resting',           emoji: '🪑', color: '#818cf8', hr: 72,  f: 0.3, theta: 90  },
-  { name: 'Office / Typing',   emoji: '💻', color: '#22d3ee', hr: 78,  f: 0.5, theta: 85  },
-  { name: 'Eating',            emoji: '🍜', color: '#34d399', hr: 85,  f: 0.6, theta: 110 },
-  { name: 'Walking',           emoji: '🚶', color: '#a3e635', hr: 95,  f: 0.8, theta: 95  },
-  { name: 'Aerobic Exercise',  emoji: '🏃', color: '#fbbf24', hr: 140, f: 1.2, theta: 100 },
-  { name: 'Strength Training', emoji: '🏋️', color: '#f97316', hr: 155, f: 3.8, theta: 120 },
-];
-let pi = 6, frame = 0;
-function animateMock() {
-  frame++;
-  const cur = presets[pi];
-  const nxt = presets[(pi + 1) % presets.length];
-  const t = (frame % 80) / 80;
-  const ease = 0.5 - Math.cos(Math.PI * t) / 2;
-  const lerp = (a, b) => a + (b - a) * ease + (Math.random() - 0.5) * a * 0.04;
-
-  document.getElementById('mock-hr').textContent = Math.round(lerp(cur.hr, nxt.hr));
-  document.getElementById('mock-f').textContent = lerp(cur.f, nxt.f).toFixed(1);
-  document.getElementById('mock-theta').textContent = Math.round(lerp(cur.theta, nxt.theta));
-  const F = lerp(cur.f, nxt.f), theta = lerp(cur.theta, nxt.theta);
-  document.getElementById('mock-torque').textContent = (F * 0.27 * Math.sin(theta * Math.PI / 180)).toFixed(1);
-
-  const showing = ease < 0.5 ? cur : nxt;
-  document.getElementById('mock-emoji').textContent = showing.emoji;
-  document.getElementById('mock-beh').textContent = showing.name;
-  document.querySelector('.app-mock-beh').style.color = showing.color;
-
-  if (frame % 80 === 0) pi = (pi + 1) % presets.length;
-}
-setInterval(animateMock, 100);
-animateMock();
 
 // ── Image zoom ─────────────────────────────────
 const zoomOverlay = document.createElement('div');
