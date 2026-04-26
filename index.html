@@ -1090,6 +1090,95 @@ IBI = peaks[i] − peaks[i−1]
           Torque at the elbow joint is the load force times the moment arm (forearm length times sine of the elbow angle). Cross-referenced with safe thresholds to warn about dangerous combinations of weight and joint angle.
         </p>
       </div>
+
+      <h2 class="sub">From physics to firmware</h2>
+      <p class="lead" style="margin-bottom: 16px;">
+        The formulas above aren't just theory — they run as C++ on the XIAO nRF52840 at 50 Hz. Below are key excerpts from the actual firmware (<a href="ElbowSleeveSystemV1.ino" style="color: var(--accent);">full source</a>).
+      </p>
+
+      <div class="formula-card">
+        <div class="formula-title">Steinhart–Hart temperature conversion</div>
+        <div class="formula-subtitle">NTC thermistor ADC → resistance → Celsius</div>
+<pre class="formula-math" style="font-size: 12px;">float computeNtcResistanceOhms(int adcValue) {
+  if (adcValue <= 0) return -1.0f;
+  float ratio = ADC_MAX / (float)adcValue;
+  return NTC_FIXED_RESISTOR_OHMS * (ratio - 1.0f);
+}
+
+float computeTemperatureCFromResistance(float resistanceOhms) {
+  if (resistanceOhms <= 0.0f) return -1000.0f;
+  float inverseT = (1.0f / NTC_T0_KELVIN)
+                  + (log(resistanceOhms / NTC_R25_OHMS) / NTC_BETA);
+  return (1.0f / inverseT) - 273.15f;
+}</pre>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-title">Flex sensor angle mapping + kinematics</div>
+        <div class="formula-subtitle">Raw ADC → elbow angle → angular velocity → angular acceleration</div>
+<pre class="formula-math" style="font-size: 12px;">float mapFlexRawToAngleDeg(float rawValue) {
+  float slope = (FLEX_BENT_ANGLE_DEG - FLEX_STRAIGHT_ANGLE_DEG)
+              / (FLEX_BENT_RAW - FLEX_STRAIGHT_RAW);
+  float angle = FLEX_STRAIGHT_ANGLE_DEG
+              + (rawValue - FLEX_STRAIGHT_RAW) * slope;
+  return clampFloat(angle, FLEX_BENT_ANGLE_DEG, FLEX_STRAIGHT_ANGLE_DEG);
+}
+
+<span class="comment">// Called at 50 Hz — computes ω and α from successive angle readings</span>
+void updateFlexKinematics(unsigned long nowMs) {
+  float dt = (nowMs - lastKinematicsSampleAtMs) / 1000.0f;
+  filteredFlexRaw += FLEX_FILTER_ALPHA * ((float)flexRaw - filteredFlexRaw);
+  float previousAngleDeg = currentAngleDeg;
+  currentAngleDeg = mapFlexRawToAngleDeg(filteredFlexRaw);
+  angularVelocityDegPerSec = (currentAngleDeg - previousAngleDeg) / dt;
+}</pre>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-title">Motor protection state machine</div>
+        <div class="formula-subtitle">Rapid bend detection → forward/settle/reverse cycle</div>
+<pre class="formula-math" style="font-size: 12px;"><span class="comment">// Triggered when bend speed exceeds 200°/s for 2 consecutive samples</span>
+enum MotorProtectionState : uint8_t {
+  MOTOR_STATE_IDLE    = 0,
+  MOTOR_STATE_FORWARD = 1,   <span class="comment">// tighten sleeve</span>
+  MOTOR_STATE_SETTLE  = 2,   <span class="comment">// hold 2 seconds</span>
+  MOTOR_STATE_REVERSE = 3    <span class="comment">// release</span>
+};
+
+void maybeStartMotorProtectionCycle(unsigned long nowMs) {
+  if (motorProtectionState != MOTOR_STATE_IDLE) return;
+  if (bendClosingSpeedDegPerSec >= BEND_SPEED_TRIGGER_DEG_PER_SEC)
+    bendSpeedTriggerSamples++;
+  else
+    bendSpeedTriggerSamples = 0;
+  if (bendSpeedTriggerSamples >= BEND_SPEED_TRIGGER_CONFIRM_SAMPLES) {
+    motorCycleCount++;
+    enterMotorProtectionState(MOTOR_STATE_FORWARD, nowMs,
+                              getMotorPhaseDurationMs());
+  }
+}</pre>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-title">BLE packet construction</div>
+        <div class="formula-subtitle">Packing sensor data into 20-byte BLE characteristics</div>
+<pre class="formula-math" style="font-size: 12px;"><span class="comment">// Three BLE characteristics, each ≤20 bytes (BLE 4.2 MTU limit)</span>
+BLECharacteristic vitalsPacketChar("19B10011-...", BLERead|BLENotify, 20);
+BLECharacteristic motionPacketChar("19B10012-...", BLERead|BLENotify, 20);
+BLECharacteristic imuPacketChar   ("19B10013-...", BLERead|BLENotify, 14);
+
+<span class="comment">// Fixed-point encoding: heartRate × 10, temperature × 100</span>
+int16_t heartRateX10 = clampToInt16((int32_t)(heartRateBpm * 10.0f));
+int16_t tempX100     = clampToInt16((int32_t)(temperatureC * 100.0f));
+
+uint8_t vitalsPacket[20] = {0};
+writeU16LE(vitalsPacket, 0, packetSequence);
+vitalsPacket[2] = buildStatusFlags();
+writeI16LE(vitalsPacket, 4, heartRateX10);
+writeI16LE(vitalsPacket, 6, spo2X10);
+writeI16LE(vitalsPacket, 8, tempX100);</pre>
+      </div>
+
     </section>
 
     <!-- ───── 05 App ───── -->
