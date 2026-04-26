@@ -506,7 +506,6 @@
         <div class="actions">
           <button id="connectBtn" class="primary">Connect Device</button>
           <button id="disconnectBtn" class="secondary" disabled>Disconnect</button>
-          <button id="demoBtn" class="secondary" onclick="toggleDemo()">🎮 Demo Mode</button>
         </div>
       </article>
 
@@ -531,6 +530,7 @@
         <div class="note" id="runtimeNote">
           Open this page from https or http://localhost with Chrome or Edge. Rapid-bend protection triggers when bend speed stays above 200 deg/s.
         </div>
+        <button class="secondary" style="width: 100%; margin-top: 10px;" onclick="toggleDemo('live')">🎮 Demo Mode</button>
       </aside>
     </section>
 
@@ -722,7 +722,10 @@
     <!-- ═══ TAB: Daily ═══ -->
     <div class="tab-page" id="tab-daily">
       <div style="padding: 16px;" id="daily-content">
-        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 4px;">Today's Summary</h1>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em;">Today's Summary</h1>
+          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('daily')" id="daily-demo-btn">🎮 Demo</button>
+        </div>
         <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="daily-status">Connect a device or enter Demo Mode to see data.</p>
 
         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
@@ -775,21 +778,35 @@
     <!-- ═══ TAB: Weekly ═══ -->
     <div class="tab-page" id="tab-weekly">
       <div style="padding: 16px;">
-        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 4px;">Weekly Overview</h1>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em;">Weekly Overview</h1>
+          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('weekly')" id="weekly-demo-btn">🎮 Demo</button>
+        </div>
         <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="weekly-status">Connect a device or enter Demo Mode to see data.</p>
 
         <article class="panel sum-card">
           <div class="sum-title">Daily Active Minutes</div>
-          <div class="bar-chart" id="weekly-bars">
-            <div class="bar-col"><div class="bar-val" id="wb-mon">--</div><div class="bar" id="wbar-mon" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Mon</div></div>
-            <div class="bar-col"><div class="bar-val" id="wb-tue">--</div><div class="bar" id="wbar-tue" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Tue</div></div>
-            <div class="bar-col"><div class="bar-val" id="wb-wed">--</div><div class="bar" id="wbar-wed" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Wed</div></div>
-            <div class="bar-col"><div class="bar-val" id="wb-thu">--</div><div class="bar" id="wbar-thu" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Thu</div></div>
-            <div class="bar-col"><div class="bar-val" id="wb-fri">--</div><div class="bar" id="wbar-fri" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Fri</div></div>
-            <div class="bar-col"><div class="bar-val" id="wb-sat">--</div><div class="bar" id="wbar-sat" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Sat</div></div>
-            <div class="bar-col"><div class="bar-val" id="wb-sun">--</div><div class="bar" id="wbar-sun" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Sun</div></div>
+          <canvas id="weeklyBarCanvas" style="width: 100%; height: 220px; border-radius: 12px; background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(240,245,242,0.96));"></canvas>
+          <div style="display: flex; gap: 14px; margin-top: 10px; font-size: 11px; color: var(--muted);">
+            <span>🟩 Active minutes</span>
+            <span style="color: var(--warn);">── 60 min goal</span>
+            <span>Total: <strong id="w-total-min" style="color: var(--ink);">--</strong></span>
+            <span>Avg: <strong id="w-avg-min" style="color: var(--ink);">--</strong></span>
           </div>
         </article>
+
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <article class="panel sum-card">
+            <div class="sum-title">SpO₂ Daily Minimums</div>
+            <canvas id="weeklySpo2Canvas" style="width: 100%; height: 140px; border-radius: 12px; background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(240,245,242,0.96));"></canvas>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 6px;"><span style="color: var(--danger);">── 93% alert threshold</span></div>
+          </article>
+          <article class="panel sum-card">
+            <div class="sum-title">EMG Peak per Day</div>
+            <canvas id="weeklyEmgCanvas" style="width: 100%; height: 140px; border-radius: 12px; background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(240,245,242,0.96));"></canvas>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 6px;">Higher = stronger muscle activation</div>
+          </article>
+        </div>
 
         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
           <article class="panel sum-card">
@@ -812,7 +829,10 @@
     <!-- ═══ TAB: Feedback ═══ -->
     <div class="tab-page" id="tab-feedback">
       <div style="padding: 16px;">
-        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 4px;">Personalized Feedback</h1>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+          <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em;">Personalized Feedback</h1>
+          <button class="secondary" style="font-size: 12px; padding: 8px 14px;" onclick="toggleDemo('feedback')" id="feedback-demo-btn">🎮 Demo</button>
+        </div>
         <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="feedback-status">Connect a device or enter Demo Mode to see feedback.</p>
         <div id="feedback-items"></div>
         <article class="panel sum-card" id="score-card" style="display: none;">
@@ -1420,11 +1440,12 @@
     ];
 
     function populateSummaryTabs() {
-      const active = demoActive || state.connected;
       const d = demoDaily;
 
       // Daily
-      document.getElementById('daily-status').textContent = active ? 'Demo data · simulated session' : 'Connect a device or enter Demo Mode to see data.';
+      const dailyActive = tabDemoActive.daily || demoActive || state.connected;
+      const active = dailyActive; // backward compat for rest of daily section
+      document.getElementById('daily-status').textContent = active ? 'Demo data · simulated session' : 'Click Demo to preview with sample data.';
       document.getElementById('d-strength').textContent = active ? d.strength : '--';
       document.getElementById('d-aerobic').textContent = active ? d.aerobic : '--';
       document.getElementById('d-walking').textContent = active ? d.walking : '--';
@@ -1460,30 +1481,29 @@
       if (active) renderDemoMiniCharts();
 
       // Weekly
+      const weeklyActive = tabDemoActive.weekly || demoActive || state.connected;
       const w = demoWeekly;
-      document.getElementById('weekly-status').textContent = active ? 'Demo data · simulated week' : 'Connect a device or enter Demo Mode to see data.';
-      const days = ['mon','tue','wed','thu','fri','sat','sun'];
-      const colors = ['var(--accent)','#19927a','var(--accent)','#19927a','var(--accent)','var(--warn)','#19927a'];
-      days.forEach((d, i) => {
-        document.getElementById('wb-' + d).textContent = active ? w[d] : '--';
-        const bar = document.getElementById('wbar-' + d);
-        bar.style.height = active ? (w[d]) + '%' : '4px';
-        bar.style.background = active ? colors[i] : 'var(--line)';
-      });
-      document.getElementById('w-active').innerHTML = active ? `${w.active} <span class="trend trend-up">↑ 18%</span>` : '--';
-      document.getElementById('w-guards').innerHTML = active ? `${w.guards} <span class="trend trend-up">↑ 4</span>` : '--';
-      document.getElementById('w-avg-session').innerHTML = active ? `${w.avgSession} <span class="trend trend-flat">→ same</span>` : '--';
-      document.getElementById('w-fatigue').innerHTML = active ? `${w.fatigue} <span class="trend trend-down">↑ 2</span>` : '--';
-      document.getElementById('w-min-spo2').textContent = active ? w.minSpo2 + '%' : '--';
+      document.getElementById('weekly-status').textContent = weeklyActive ? 'Demo data · simulated week' : 'Click Demo to preview with sample data.';
+      document.getElementById('w-active').innerHTML = weeklyActive ? `${w.active} <span class="trend trend-up">↑ 18%</span>` : '--';
+      document.getElementById('w-guards').innerHTML = weeklyActive ? `${w.guards} <span class="trend trend-up">↑ 4</span>` : '--';
+      document.getElementById('w-avg-session').innerHTML = weeklyActive ? `${w.avgSession} <span class="trend trend-flat">→ same</span>` : '--';
+      document.getElementById('w-fatigue').innerHTML = weeklyActive ? `${w.fatigue} <span class="trend trend-down">↑ 2</span>` : '--';
+      document.getElementById('w-min-spo2').textContent = weeklyActive ? w.minSpo2 + '%' : '--';
+      document.getElementById('w-total-min').textContent = weeklyActive ? '434' : '--';
+      document.getElementById('w-avg-min').textContent = weeklyActive ? '62 min/day' : '--';
 
-      // Weekly HR chart
-      if (active) renderWeeklyHrChart();
+      // Weekly charts
+      renderWeeklyBarChart(weeklyActive);
+      renderWeeklySpo2Chart(weeklyActive);
+      renderWeeklyEmgChart(weeklyActive);
+      if (weeklyActive) renderWeeklyHrChart();
 
       // Feedback
-      document.getElementById('feedback-status').textContent = active ? 'Based on demo session data' : 'Connect a device or enter Demo Mode to see feedback.';
+      const feedbackActive = tabDemoActive.feedback || demoActive || state.connected;
+      document.getElementById('feedback-status').textContent = feedbackActive ? 'Based on demo session data' : 'Click Demo to preview with sample feedback.';
       const fbEl = document.getElementById('feedback-items');
       const scoreCard = document.getElementById('score-card');
-      if (active) {
+      if (feedbackActive) {
         fbEl.innerHTML = demoFeedback.map(f => `<div class="fb-item"><div class="fb-icon" style="background:${f.bg}; color:${f.color};">${f.icon}</div><div><div class="fb-title">${f.title}</div><div class="fb-desc">${f.desc}</div></div></div>`).join('');
         scoreCard.style.display = 'block';
         document.getElementById('fb-score').textContent = '78';
@@ -1517,6 +1537,125 @@
       }
     }
 
+    function drawBarChart(canvasId, values, labels, goalLine, yMax, yUnit, barColor) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const { ctx, width, height } = prepareCanvas(canvas);
+      ctx.clearRect(0, 0, width, height);
+
+      const left = 40, right = 16, top = 16, bottom = 28;
+      const drawW = width - left - right;
+      const drawH = height - top - bottom;
+      const barW = drawW / values.length * 0.6;
+      const gap = drawW / values.length;
+
+      // Y-axis labels
+      ctx.save();
+      ctx.fillStyle = '#65776f';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'right';
+      for (let i = 0; i <= 4; i++) {
+        const val = Math.round(yMax / 4 * i);
+        const y = top + drawH - (drawH * i / 4);
+        ctx.fillText(val + yUnit, left - 6, y + 3);
+        ctx.strokeStyle = 'rgba(17,33,28,0.06)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(left, y);
+        ctx.lineTo(width - right, y);
+        ctx.stroke();
+      }
+
+      // Goal line
+      if (goalLine != null) {
+        const goalY = top + drawH - (goalLine / yMax * drawH);
+        ctx.strokeStyle = '#cb8320';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(left, goalY);
+        ctx.lineTo(width - right, goalY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#cb8320';
+        ctx.textAlign = 'left';
+        ctx.fillText('Goal: ' + goalLine + yUnit, width - right - 70, goalY - 5);
+      }
+
+      // Bars
+      values.forEach((val, i) => {
+        const x = left + gap * i + (gap - barW) / 2;
+        const barH = (val / yMax) * drawH;
+        const y = top + drawH - barH;
+
+        // Bar fill
+        const grad = ctx.createLinearGradient(x, y, x, top + drawH);
+        grad.addColorStop(0, barColor || '#15735f');
+        grad.addColorStop(1, 'rgba(21,115,95,0.3)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]);
+        ctx.fill();
+
+        // Value on top
+        ctx.fillStyle = '#11211c';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(val, x + barW / 2, y - 5);
+
+        // Day label
+        ctx.fillStyle = '#65776f';
+        ctx.font = '10px sans-serif';
+        ctx.fillText(labels[i], x + barW / 2, top + drawH + 16);
+      });
+      ctx.restore();
+    }
+
+    function renderWeeklyBarChart(active) {
+      if (!active) {
+        const canvas = document.getElementById('weeklyBarCanvas');
+        if (canvas) { const { ctx, width, height } = prepareCanvas(canvas); ctx.clearRect(0, 0, width, height); drawGrid(ctx, width, height); }
+        return;
+      }
+      drawBarChart('weeklyBarCanvas',
+        [42, 65, 38, 72, 55, 88, 74],
+        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        60, 100, ' min', '#15735f');
+    }
+
+    function renderWeeklySpo2Chart(active) {
+      const canvas = document.getElementById('weeklySpo2Canvas');
+      if (!canvas) return;
+      const { ctx, width, height } = prepareCanvas(canvas);
+      ctx.clearRect(0, 0, width, height);
+      if (!active) { drawGrid(ctx, width, height); return; }
+
+      const spo2Mins = [94, 92, 96, 91, 95, 93, 94];
+      drawGrid(ctx, width, height);
+      drawSeries(ctx, width, height, spo2Mins, '#1f72ba', 88, 100);
+
+      // 93% threshold line
+      const threshY = 8 + (height - 16) - ((93 - 88) / 12) * (height - 16);
+      ctx.strokeStyle = '#c0503b';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 3]);
+      ctx.beginPath(); ctx.moveTo(8, threshY); ctx.lineTo(width - 8, threshY); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function renderWeeklyEmgChart(active) {
+      const canvas = document.getElementById('weeklyEmgCanvas');
+      if (!canvas) return;
+      const { ctx, width, height } = prepareCanvas(canvas);
+      ctx.clearRect(0, 0, width, height);
+      if (!active) { drawGrid(ctx, width, height); return; }
+
+      drawBarChart('weeklyEmgCanvas',
+        [2400, 2800, 2600, 3100, 2900, 3200, 3000],
+        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        null, 3500, '', '#cb8320');
+    }
+
     function renderWeeklyHrChart() {
       const canvas = document.getElementById('weeklyHrChart');
       if (!canvas) return;
@@ -1529,23 +1668,42 @@
       drawSeries(ctx, width, height, hrLow, '#287f69', 40, 180);
     }
 
+    // Track per-tab demo state
+    const tabDemoActive = { live: false, daily: false, weekly: false, feedback: false };
+
     function stopDemo() {
       demoActive = false;
+      tabDemoActive.live = false;
       clearInterval(demoInterval);
-      document.getElementById('demoBtn').textContent = '🎮 Demo Mode';
       setConnectionState(false, 'Demo mode ended.');
+      updateDemoButtons();
       populateSummaryTabs();
     }
 
-    function toggleDemo() {
-      if (demoActive) { stopDemo(); return; }
+    function updateDemoButtons() {
+      ['daily', 'weekly', 'feedback'].forEach(tab => {
+        const btn = document.getElementById(tab + '-demo-btn');
+        if (btn) btn.textContent = tabDemoActive[tab] ? '⏹ Stop' : '🎮 Demo';
+      });
+    }
 
-      if (state.connected) disconnectDevice();
-      demoActive = true;
-      demoFrame = 0;
-      document.getElementById('demoBtn').textContent = '⏹ Stop Demo';
-      setConnectionState(true, 'Demo mode active — simulating sensor data.');
-      ui.deviceText.textContent = 'IMSES Demo';
+    function toggleDemo(tab) {
+      if (tab === 'live') {
+        // Live tab: global demo with simulated sensor stream
+        if (demoActive) { stopDemo(); return; }
+        if (state.connected) disconnectDevice();
+        demoActive = true;
+        tabDemoActive.live = true;
+        demoFrame = 0;
+        setConnectionState(true, 'Demo mode active — simulating sensor data.');
+        ui.deviceText.textContent = 'IMSES Demo';
+      } else {
+        // Summary tabs: toggle independently
+        tabDemoActive[tab] = !tabDemoActive[tab];
+        updateDemoButtons();
+        populateSummaryTabs();
+        return;
+      }
       populateSummaryTabs();
 
       demoInterval = setInterval(() => {
