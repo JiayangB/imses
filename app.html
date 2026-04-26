@@ -721,46 +721,53 @@
 
     <!-- ═══ TAB: Daily ═══ -->
     <div class="tab-page" id="tab-daily">
-      <div style="padding: 16px;">
-        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 16px;">Today's Summary</h1>
+      <div style="padding: 16px;" id="daily-content">
+        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 4px;">Today's Summary</h1>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="daily-status">Connect a device or enter Demo Mode to see data.</p>
 
-        <article class="panel sum-card">
-          <div class="sum-title">Activity Breakdown</div>
-          <div style="display: flex; justify-content: center; margin: 16px 0;">
-            <svg width="180" height="180" viewBox="0 0 180 180">
-              <circle cx="90" cy="90" r="70" fill="none" stroke="#15735f" stroke-width="24" stroke-dasharray="88 352" stroke-dashoffset="0" transform="rotate(-90 90 90)"/>
-              <circle cx="90" cy="90" r="70" fill="none" stroke="#19927a" stroke-width="24" stroke-dasharray="66 374" stroke-dashoffset="-88" transform="rotate(-90 90 90)"/>
-              <circle cx="90" cy="90" r="70" fill="none" stroke="#cb8320" stroke-width="24" stroke-dasharray="44 396" stroke-dashoffset="-154" transform="rotate(-90 90 90)"/>
-              <circle cx="90" cy="90" r="70" fill="none" stroke="#257859" stroke-width="24" stroke-dasharray="110 330" stroke-dashoffset="-198" transform="rotate(-90 90 90)"/>
-              <circle cx="90" cy="90" r="70" fill="none" stroke="#65776f" stroke-width="24" stroke-dasharray="44 396" stroke-dashoffset="-308" transform="rotate(-90 90 90)"/>
-              <text x="90" y="85" text-anchor="middle" fill="var(--ink)" font-size="28" font-weight="700" font-family="var(--font-head)">6.2</text>
-              <text x="90" y="105" text-anchor="middle" fill="var(--muted)" font-size="11">hours tracked</text>
-            </svg>
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <article class="panel sum-card">
+            <div class="sum-title">Activity Breakdown</div>
+            <div style="display: flex; justify-content: center; margin: 16px 0;" id="daily-pie-wrap">
+              <svg width="180" height="180" viewBox="0 0 180 180" id="daily-pie">
+                <circle cx="90" cy="90" r="70" fill="none" stroke="var(--line)" stroke-width="24"/>
+                <text x="90" y="85" text-anchor="middle" fill="var(--ink)" font-size="28" font-weight="700" font-family="var(--font-head)" id="daily-hours">--</text>
+                <text x="90" y="105" text-anchor="middle" fill="var(--muted)" font-size="11">hours tracked</text>
+              </svg>
+            </div>
+            <div class="sum-row"><span class="lbl">🏋️ Strength</span><span class="val" id="d-strength">--</span></div>
+            <div class="sum-row"><span class="lbl">🏃 Aerobic</span><span class="val" id="d-aerobic">--</span></div>
+            <div class="sum-row"><span class="lbl">🚶 Walking</span><span class="val" id="d-walking">--</span></div>
+            <div class="sum-row"><span class="lbl">💻 Office</span><span class="val" id="d-office">--</span></div>
+            <div class="sum-row"><span class="lbl">🪑 Resting</span><span class="val" id="d-resting">--</span></div>
+            <div class="sum-row"><span class="lbl">⚠️ Fatigue alerts</span><span class="val" id="d-fatigue" style="color: var(--danger);">--</span></div>
+          </article>
+
+          <div>
+            <article class="panel sum-card">
+              <div class="sum-title">Sensor Trends (Today)</div>
+              <div class="chart-card" style="margin-bottom: 10px;">
+                <header><strong>Temperature</strong><span id="d-temp-val">--</span></header>
+                <canvas id="dailyTempChart" style="height: 80px;"></canvas>
+              </div>
+              <div class="chart-card">
+                <header><strong>SpO₂</strong><span id="d-spo2-val">--</span></header>
+                <canvas id="dailySpo2Chart" style="height: 80px;"></canvas>
+              </div>
+            </article>
           </div>
-          <div class="sum-row"><span class="lbl">🏋️ Strength</span><span class="val">20%</span></div>
-          <div class="sum-row"><span class="lbl">🏃 Aerobic</span><span class="val">15%</span></div>
-          <div class="sum-row"><span class="lbl">🚶 Walking</span><span class="val">10%</span></div>
-          <div class="sum-row"><span class="lbl">💻 Office</span><span class="val">25%</span></div>
-          <div class="sum-row"><span class="lbl">🪑 Resting</span><span class="val">20%</span></div>
-          <div class="sum-row"><span class="lbl">😴 Sleeping</span><span class="val">10%</span></div>
-          <div class="sum-row"><span class="lbl">⚠️ Fatigue alerts</span><span class="val" style="color: var(--danger);">2</span></div>
-        </article>
+        </div>
 
         <article class="panel sum-card">
-          <div class="sum-title">Sensor Averages</div>
-          <div class="sum-row"><span class="lbl">🌡️ Avg temperature</span><span class="val" style="font-family: var(--font-head);">34.2 °C</span></div>
-          <div class="sum-row"><span class="lbl">🫁 Min SpO₂</span><span class="val" style="font-family: var(--font-head); color: var(--danger);">91%</span></div>
-          <div class="sum-row"><span class="lbl">📐 Max flex angle</span><span class="val" style="font-family: var(--font-head);">142°</span></div>
-          <div class="sum-row"><span class="lbl">💪 Peak EMG</span><span class="val" style="font-family: var(--font-head);">3124 ADC</span></div>
-          <div class="sum-row"><span class="lbl">🔄 Peak bend speed</span><span class="val" style="font-family: var(--font-head);">268 °/s</span></div>
-        </article>
-
-        <article class="panel sum-card">
-          <div class="sum-title">Training Metrics</div>
-          <div class="sum-row"><span class="lbl">Active minutes</span><span class="val">74 min <span class="trend trend-up">↑ 12%</span></span></div>
-          <div class="sum-row"><span class="lbl">Motor guard triggers</span><span class="val">5</span></div>
-          <div class="sum-row"><span class="lbl">Avg session length</span><span class="val">18 min</span></div>
-          <div class="sum-row"><span class="lbl">Peak angle under load</span><span class="val" style="font-family: var(--font-head);">38°</span></div>
+          <div class="sum-title">Sensor Peaks</div>
+          <div class="grid metrics" style="margin-bottom: 0;">
+            <div class="panel metric-card" style="min-height: 90px;"><p class="metric-label">Avg Temp</p><p class="metric-value" id="d-avg-temp">--<span class="metric-unit">°C</span></p></div>
+            <div class="panel metric-card" style="min-height: 90px;"><p class="metric-label">Min SpO₂</p><p class="metric-value" id="d-min-spo2">--<span class="metric-unit">%</span></p></div>
+            <div class="panel metric-card" style="min-height: 90px;"><p class="metric-label">Peak EMG</p><p class="metric-value" id="d-peak-emg">--<span class="metric-unit">ADC</span></p></div>
+            <div class="panel metric-card" style="min-height: 90px;"><p class="metric-label">Max Angle</p><p class="metric-value" id="d-max-angle">--<span class="metric-unit">DEG</span></p></div>
+            <div class="panel metric-card" style="min-height: 90px;"><p class="metric-label">Peak Speed</p><p class="metric-value" id="d-peak-speed">--<span class="metric-unit">DEG/S</span></p></div>
+            <div class="panel metric-card" style="min-height: 90px;"><p class="metric-label">Guard Triggers</p><p class="metric-value" id="d-guards">--<span class="metric-unit">RUNS</span></p></div>
+          </div>
         </article>
       </div>
     </div>
@@ -768,63 +775,51 @@
     <!-- ═══ TAB: Weekly ═══ -->
     <div class="tab-page" id="tab-weekly">
       <div style="padding: 16px;">
-        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 16px;">Weekly Overview</h1>
+        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 4px;">Weekly Overview</h1>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="weekly-status">Connect a device or enter Demo Mode to see data.</p>
 
         <article class="panel sum-card">
           <div class="sum-title">Daily Active Minutes</div>
-          <div class="bar-chart">
-            <div class="bar-col"><div class="bar-val">42</div><div class="bar" style="height:42%; background: var(--accent);"></div><div class="bar-lbl">Mon</div></div>
-            <div class="bar-col"><div class="bar-val">65</div><div class="bar" style="height:65%; background: #19927a;"></div><div class="bar-lbl">Tue</div></div>
-            <div class="bar-col"><div class="bar-val">38</div><div class="bar" style="height:38%; background: var(--accent);"></div><div class="bar-lbl">Wed</div></div>
-            <div class="bar-col"><div class="bar-val">72</div><div class="bar" style="height:72%; background: #19927a;"></div><div class="bar-lbl">Thu</div></div>
-            <div class="bar-col"><div class="bar-val">55</div><div class="bar" style="height:55%; background: var(--accent);"></div><div class="bar-lbl">Fri</div></div>
-            <div class="bar-col"><div class="bar-val">88</div><div class="bar" style="height:88%; background: var(--warn);"></div><div class="bar-lbl">Sat</div></div>
-            <div class="bar-col"><div class="bar-val">74</div><div class="bar" style="height:74%; background: #19927a;"></div><div class="bar-lbl">Sun</div></div>
+          <div class="bar-chart" id="weekly-bars">
+            <div class="bar-col"><div class="bar-val" id="wb-mon">--</div><div class="bar" id="wbar-mon" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Mon</div></div>
+            <div class="bar-col"><div class="bar-val" id="wb-tue">--</div><div class="bar" id="wbar-tue" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Tue</div></div>
+            <div class="bar-col"><div class="bar-val" id="wb-wed">--</div><div class="bar" id="wbar-wed" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Wed</div></div>
+            <div class="bar-col"><div class="bar-val" id="wb-thu">--</div><div class="bar" id="wbar-thu" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Thu</div></div>
+            <div class="bar-col"><div class="bar-val" id="wb-fri">--</div><div class="bar" id="wbar-fri" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Fri</div></div>
+            <div class="bar-col"><div class="bar-val" id="wb-sat">--</div><div class="bar" id="wbar-sat" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Sat</div></div>
+            <div class="bar-col"><div class="bar-val" id="wb-sun">--</div><div class="bar" id="wbar-sun" style="height:4px; background: var(--line);"></div><div class="bar-lbl">Sun</div></div>
           </div>
         </article>
 
-        <article class="panel sum-card">
-          <div class="sum-title">Week vs Last Week</div>
-          <div class="sum-row"><span class="lbl">Total active time</span><span class="val">7.2 hrs <span class="trend trend-up">↑ 18%</span></span></div>
-          <div class="sum-row"><span class="lbl">Motor guard triggers</span><span class="val">14 <span class="trend trend-up">↑ 4</span></span></div>
-          <div class="sum-row"><span class="lbl">Avg session length</span><span class="val">16 min <span class="trend trend-flat">→ same</span></span></div>
-          <div class="sum-row"><span class="lbl">Fatigue alerts</span><span class="val" style="color: var(--danger);">5 <span class="trend trend-down">↑ 2</span></span></div>
-          <div class="sum-row"><span class="lbl">Min SpO₂ (week)</span><span class="val" style="font-family: var(--font-head);">91%</span></div>
-          <div class="sum-row"><span class="lbl">Peak EMG avg</span><span class="val" style="font-family: var(--font-head);">2980 ADC</span></div>
-        </article>
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+          <article class="panel sum-card">
+            <div class="sum-title">Week vs Last Week</div>
+            <div class="sum-row"><span class="lbl">Total active time</span><span class="val" id="w-active">--</span></div>
+            <div class="sum-row"><span class="lbl">Motor guard triggers</span><span class="val" id="w-guards">--</span></div>
+            <div class="sum-row"><span class="lbl">Avg session length</span><span class="val" id="w-avg-session">--</span></div>
+            <div class="sum-row"><span class="lbl">Fatigue alerts</span><span class="val" id="w-fatigue" style="color: var(--danger);">--</span></div>
+            <div class="sum-row"><span class="lbl">Min SpO₂ (week)</span><span class="val" id="w-min-spo2" style="font-family: var(--font-head);">--</span></div>
+          </article>
 
-        <article class="panel sum-card">
-          <div class="sum-title">Behavior Distribution</div>
-          <div class="sum-row"><span class="lbl">🏋️ Strength</span><span class="val">32%</span></div>
-          <div class="sum-row"><span class="lbl">🏃 Aerobic</span><span class="val">18%</span></div>
-          <div class="sum-row"><span class="lbl">🚶 Walking</span><span class="val">15%</span></div>
-          <div class="sum-row"><span class="lbl">💻 Office</span><span class="val">20%</span></div>
-          <div class="sum-row"><span class="lbl">🪑 Resting</span><span class="val">10%</span></div>
-          <div class="sum-row"><span class="lbl">😴 Sleeping</span><span class="val">5%</span></div>
-        </article>
+          <article class="panel sum-card">
+            <div class="sum-title">Weekly Trend</div>
+            <div class="chart-card"><header><strong>Heart Rate Range</strong><span>7 days</span></header><canvas id="weeklyHrChart" style="height: 100px;"></canvas></div>
+          </article>
+        </div>
       </div>
     </div>
 
     <!-- ═══ TAB: Feedback ═══ -->
     <div class="tab-page" id="tab-feedback">
       <div style="padding: 16px;">
-        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 16px;">Personalized Feedback</h1>
-
-        <div class="fb-item"><div class="fb-icon" style="background: rgba(192,80,59,0.12); color: var(--danger);">⚠</div><div><div class="fb-title">SpO₂ dropped below 93% twice today</div><div class="fb-desc">Your blood oxygen dipped to 91% during your second session. Consider shorter sets with more rest. If this happens regularly, consult a doctor.</div></div></div>
-
-        <div class="fb-item"><div class="fb-icon" style="background: rgba(203,131,32,0.12); color: var(--warn);">💪</div><div><div class="fb-title">EMG peak is increasing, good progress</div><div class="fb-desc">Your peak EMG this week is 8% higher than last week. Your muscles are generating more force. Balance intensity with recovery days.</div></div></div>
-
-        <div class="fb-item"><div class="fb-icon" style="background: rgba(37,120,89,0.12); color: var(--ok);">⏱</div><div><div class="fb-title">Sessions average 18 min. Try extending to 20</div><div class="fb-desc">Adding one more set per exercise could push you into the 20–25 min range for better results.</div></div></div>
-
-        <div class="fb-item"><div class="fb-icon" style="background: rgba(21,115,95,0.08); color: var(--accent);">🔄</div><div><div class="fb-title">2 motor guard activations this session</div><div class="fb-desc">The rapid-bend protection triggered twice, meaning your elbow velocity exceeded 200°/s. Slow your eccentric phase to reduce strain.</div></div></div>
-
-        <div class="fb-item"><div class="fb-icon" style="background: rgba(21,115,95,0.08); color: var(--accent);">🌡️</div><div><div class="fb-title">Skin temperature stable at 34.2°C</div><div class="fb-desc">No signs of overheating or hypothermia throughout the session. Good thermoregulation.</div></div></div>
-
-        <article class="panel sum-card">
+        <h1 style="font-family: var(--font-head); font-size: 28px; letter-spacing: -0.03em; margin-bottom: 4px;">Personalized Feedback</h1>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="feedback-status">Connect a device or enter Demo Mode to see feedback.</p>
+        <div id="feedback-items"></div>
+        <article class="panel sum-card" id="score-card" style="display: none;">
           <div class="score-box">
-            <div class="score-num">78</div>
-            <div class="score-label">Good</div>
-            <div class="score-hint">Watch your SpO₂ and extend session length for a higher score</div>
+            <div class="score-num" id="fb-score">--</div>
+            <div class="score-label" id="fb-rating">--</div>
+            <div class="score-hint" id="fb-hint">--</div>
           </div>
         </article>
       </div>
@@ -1357,6 +1352,7 @@
     }
 
     function disconnectDevice() {
+      if (demoActive) { stopDemo(); return; }
       if (state.device?.gatt?.connected) {
         state.device.gatt.disconnect();
       } else {
@@ -1412,14 +1408,137 @@
       { hr: 170, spo2: 92, temp: 37, angle: 100, flex: 1500, emg: 1200, bend: 10, accel: -180, motor: 1 },
     ];
 
-    function toggleDemo() {
-      if (demoActive) {
-        demoActive = false;
-        clearInterval(demoInterval);
-        document.getElementById('demoBtn').textContent = '🎮 Demo Mode';
-        setConnectionState(false, 'Demo mode ended.');
-        return;
+    // Demo data for summary tabs
+    const demoDaily = { strength: '20%', aerobic: '15%', walking: '10%', office: '25%', resting: '20%', fatigue: 2, hours: '6.2', avgTemp: '34.2', minSpo2: '91', peakEmg: '3124', maxAngle: '142', peakSpeed: '268', guards: 5 };
+    const demoWeekly = { mon: 42, tue: 65, wed: 38, thu: 72, fri: 55, sat: 88, sun: 74, active: '7.2 hrs', guards: 14, avgSession: '16 min', fatigue: 5, minSpo2: '91' };
+    const demoFeedback = [
+      { icon: '⚠', bg: 'rgba(192,80,59,0.12)', color: 'var(--danger)', title: 'SpO₂ dropped below 93% twice today', desc: 'Your blood oxygen dipped to 91% during your second session. Consider shorter sets with more rest.' },
+      { icon: '💪', bg: 'rgba(203,131,32,0.12)', color: 'var(--warn)', title: 'EMG peak is increasing, good progress', desc: 'Your peak EMG this week is 8% higher than last week. Balance intensity with recovery days.' },
+      { icon: '⏱', bg: 'rgba(37,120,89,0.12)', color: 'var(--ok)', title: 'Sessions average 18 min. Try extending to 20', desc: 'Adding one more set per exercise could push into the optimal 20–25 min range.' },
+      { icon: '🔄', bg: 'rgba(21,115,95,0.08)', color: 'var(--accent)', title: '2 motor guard activations this session', desc: 'Elbow velocity exceeded 200°/s. Slow your eccentric phase to reduce strain.' },
+      { icon: '🌡️', bg: 'rgba(21,115,95,0.08)', color: 'var(--accent)', title: 'Skin temperature stable at 34.2°C', desc: 'No signs of overheating throughout the session. Good thermoregulation.' },
+    ];
+
+    function populateSummaryTabs() {
+      const active = demoActive || state.connected;
+      const d = demoDaily;
+
+      // Daily
+      document.getElementById('daily-status').textContent = active ? 'Demo data · simulated session' : 'Connect a device or enter Demo Mode to see data.';
+      document.getElementById('d-strength').textContent = active ? d.strength : '--';
+      document.getElementById('d-aerobic').textContent = active ? d.aerobic : '--';
+      document.getElementById('d-walking').textContent = active ? d.walking : '--';
+      document.getElementById('d-office').textContent = active ? d.office : '--';
+      document.getElementById('d-resting').textContent = active ? d.resting : '--';
+      document.getElementById('d-fatigue').textContent = active ? d.fatigue : '--';
+      document.getElementById('daily-hours').textContent = active ? d.hours : '--';
+      document.getElementById('d-avg-temp').innerHTML = active ? `${d.avgTemp}<span class="metric-unit">°C</span>` : `--<span class="metric-unit">°C</span>`;
+      document.getElementById('d-min-spo2').innerHTML = active ? `${d.minSpo2}<span class="metric-unit">%</span>` : `--<span class="metric-unit">%</span>`;
+      document.getElementById('d-peak-emg').innerHTML = active ? `${d.peakEmg}<span class="metric-unit">ADC</span>` : `--<span class="metric-unit">ADC</span>`;
+      document.getElementById('d-max-angle').innerHTML = active ? `${d.maxAngle}<span class="metric-unit">DEG</span>` : `--<span class="metric-unit">DEG</span>`;
+      document.getElementById('d-peak-speed').innerHTML = active ? `${d.peakSpeed}<span class="metric-unit">DEG/S</span>` : `--<span class="metric-unit">DEG/S</span>`;
+      document.getElementById('d-guards').innerHTML = active ? `${d.guards}<span class="metric-unit">RUNS</span>` : `--<span class="metric-unit">RUNS</span>`;
+
+      // Daily pie
+      const pie = document.getElementById('daily-pie');
+      if (active) {
+        pie.innerHTML = `
+          <circle cx="90" cy="90" r="70" fill="none" stroke="#15735f" stroke-width="24" stroke-dasharray="88 352" stroke-dashoffset="0" transform="rotate(-90 90 90)"/>
+          <circle cx="90" cy="90" r="70" fill="none" stroke="#19927a" stroke-width="24" stroke-dasharray="66 374" stroke-dashoffset="-88" transform="rotate(-90 90 90)"/>
+          <circle cx="90" cy="90" r="70" fill="none" stroke="#cb8320" stroke-width="24" stroke-dasharray="44 396" stroke-dashoffset="-154" transform="rotate(-90 90 90)"/>
+          <circle cx="90" cy="90" r="70" fill="none" stroke="#257859" stroke-width="24" stroke-dasharray="110 330" stroke-dashoffset="-198" transform="rotate(-90 90 90)"/>
+          <circle cx="90" cy="90" r="70" fill="none" stroke="#65776f" stroke-width="24" stroke-dasharray="44 396" stroke-dashoffset="-308" transform="rotate(-90 90 90)"/>
+          <text x="90" y="85" text-anchor="middle" fill="var(--ink)" font-size="28" font-weight="700" font-family="var(--font-head)" id="daily-hours">${d.hours}</text>
+          <text x="90" y="105" text-anchor="middle" fill="var(--muted)" font-size="11">hours tracked</text>`;
+      } else {
+        pie.innerHTML = `<circle cx="90" cy="90" r="70" fill="none" stroke="var(--line)" stroke-width="24"/>
+          <text x="90" y="85" text-anchor="middle" fill="var(--ink)" font-size="28" font-weight="700" font-family="var(--font-head)" id="daily-hours">--</text>
+          <text x="90" y="105" text-anchor="middle" fill="var(--muted)" font-size="11">hours tracked</text>`;
       }
+
+      // Daily mini charts
+      if (active) renderDemoMiniCharts();
+
+      // Weekly
+      const w = demoWeekly;
+      document.getElementById('weekly-status').textContent = active ? 'Demo data · simulated week' : 'Connect a device or enter Demo Mode to see data.';
+      const days = ['mon','tue','wed','thu','fri','sat','sun'];
+      const colors = ['var(--accent)','#19927a','var(--accent)','#19927a','var(--accent)','var(--warn)','#19927a'];
+      days.forEach((d, i) => {
+        document.getElementById('wb-' + d).textContent = active ? w[d] : '--';
+        const bar = document.getElementById('wbar-' + d);
+        bar.style.height = active ? (w[d]) + '%' : '4px';
+        bar.style.background = active ? colors[i] : 'var(--line)';
+      });
+      document.getElementById('w-active').innerHTML = active ? `${w.active} <span class="trend trend-up">↑ 18%</span>` : '--';
+      document.getElementById('w-guards').innerHTML = active ? `${w.guards} <span class="trend trend-up">↑ 4</span>` : '--';
+      document.getElementById('w-avg-session').innerHTML = active ? `${w.avgSession} <span class="trend trend-flat">→ same</span>` : '--';
+      document.getElementById('w-fatigue').innerHTML = active ? `${w.fatigue} <span class="trend trend-down">↑ 2</span>` : '--';
+      document.getElementById('w-min-spo2').textContent = active ? w.minSpo2 + '%' : '--';
+
+      // Weekly HR chart
+      if (active) renderWeeklyHrChart();
+
+      // Feedback
+      document.getElementById('feedback-status').textContent = active ? 'Based on demo session data' : 'Connect a device or enter Demo Mode to see feedback.';
+      const fbEl = document.getElementById('feedback-items');
+      const scoreCard = document.getElementById('score-card');
+      if (active) {
+        fbEl.innerHTML = demoFeedback.map(f => `<div class="fb-item"><div class="fb-icon" style="background:${f.bg}; color:${f.color};">${f.icon}</div><div><div class="fb-title">${f.title}</div><div class="fb-desc">${f.desc}</div></div></div>`).join('');
+        scoreCard.style.display = 'block';
+        document.getElementById('fb-score').textContent = '78';
+        document.getElementById('fb-rating').textContent = 'Good';
+        document.getElementById('fb-hint').textContent = 'Watch your SpO₂ and extend session length for a higher score';
+      } else {
+        fbEl.innerHTML = '<div style="text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px;">No data available yet</div>';
+        scoreCard.style.display = 'none';
+      }
+    }
+
+    function renderDemoMiniCharts() {
+      // Temp chart - simulated 24h data
+      const tempCanvas = document.getElementById('dailyTempChart');
+      if (tempCanvas) {
+        const { ctx, width, height } = prepareCanvas(tempCanvas);
+        ctx.clearRect(0, 0, width, height);
+        drawGrid(ctx, width, height);
+        const tempData = Array.from({length: 48}, (_, i) => 32 + Math.sin(i / 8) * 2.5 + Math.random() * 0.5);
+        drawSeries(ctx, width, height, tempData, '#ca7e18', 30, 38);
+        document.getElementById('d-temp-val').textContent = 'avg 34.2°C';
+      }
+      const spo2Canvas = document.getElementById('dailySpo2Chart');
+      if (spo2Canvas) {
+        const { ctx, width, height } = prepareCanvas(spo2Canvas);
+        ctx.clearRect(0, 0, width, height);
+        drawGrid(ctx, width, height);
+        const spo2Data = Array.from({length: 48}, (_, i) => 96 + Math.sin(i / 6) * 2 - Math.random() * 1.5);
+        drawSeries(ctx, width, height, spo2Data, '#1f72ba', 88, 100);
+        document.getElementById('d-spo2-val').textContent = 'min 91%';
+      }
+    }
+
+    function renderWeeklyHrChart() {
+      const canvas = document.getElementById('weeklyHrChart');
+      if (!canvas) return;
+      const { ctx, width, height } = prepareCanvas(canvas);
+      ctx.clearRect(0, 0, width, height);
+      drawGrid(ctx, width, height);
+      const hrHigh = [130, 155, 120, 160, 145, 170, 155];
+      const hrLow = [55, 60, 58, 62, 55, 65, 58];
+      drawSeries(ctx, width, height, hrHigh, '#cf4f3c', 40, 180);
+      drawSeries(ctx, width, height, hrLow, '#287f69', 40, 180);
+    }
+
+    function stopDemo() {
+      demoActive = false;
+      clearInterval(demoInterval);
+      document.getElementById('demoBtn').textContent = '🎮 Demo Mode';
+      setConnectionState(false, 'Demo mode ended.');
+      populateSummaryTabs();
+    }
+
+    function toggleDemo() {
+      if (demoActive) { stopDemo(); return; }
 
       if (state.connected) disconnectDevice();
       demoActive = true;
@@ -1427,6 +1546,7 @@
       document.getElementById('demoBtn').textContent = '⏹ Stop Demo';
       setConnectionState(true, 'Demo mode active — simulating sensor data.');
       ui.deviceText.textContent = 'IMSES Demo';
+      populateSummaryTabs();
 
       demoInterval = setInterval(() => {
         demoFrame++;
@@ -1481,6 +1601,7 @@
       }, 100);
     }
 
+    populateSummaryTabs();
     bootstrap();
   </script>
 </body>
