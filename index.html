@@ -1071,35 +1071,6 @@
         </div>
       </div>
 
-      <div class="behavior-tree">
-        <div class="tree-level safety">
-          <div class="tree-label">Priority 0 · Safety override (checked first)</div>
-          <div class="tree-branches">
-            <div class="tree-branch"><div class="tree-branch-cond">SpO₂ &lt; 93%</div><div class="tree-branch-name">⚠ Low oxygen alert</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">ω drop 100→20 in 3s</div><div class="tree-branch-name">⚠ Fatigue warning</div></div>
-          </div>
-        </div>
-        <div class="tree-level">
-          <div class="tree-label">Tier 1 · Primary classification by angular velocity</div>
-          <div class="tree-branches">
-            <div class="tree-branch"><div class="tree-branch-cond">ω &lt; 15°/s</div><div class="tree-branch-name">Group A · Static</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">15 ≤ ω &lt; 100°/s</div><div class="tree-branch-name">Group B · Daily activity</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">ω ≥ 100°/s</div><div class="tree-branch-name">Group C · Exercise</div></div>
-          </div>
-        </div>
-        <div class="tree-level">
-          <div class="tree-label">Tier 2 · Sub-classification</div>
-          <div class="tree-branches">
-            <div class="tree-branch"><div class="tree-branch-cond">A · HR &lt; 68</div><div class="tree-branch-name">😴 Sleeping</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">A · HR ≥ 68</div><div class="tree-branch-name">🪑 Resting</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">B · θ stable 70–100°</div><div class="tree-branch-name">💻 Office / Typing</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">B · ω rhythmic</div><div class="tree-branch-name">🚶 Walking</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">B · else</div><div class="tree-branch-name">🍜 Eating</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">C · EMG low</div><div class="tree-branch-name">🏃 Aerobic exercise</div></div>
-            <div class="tree-branch"><div class="tree-branch-cond">C · EMG high</div><div class="tree-branch-name">🏋️ Strength training</div></div>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- ───── 03 Motivation & Novelty ───── -->
