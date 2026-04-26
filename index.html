@@ -872,8 +872,108 @@
 
       <h2 class="sub">Behavior classification algorithm</h2>
       <p class="lead" style="margin-bottom: 16px;">
-        A three-tier decision tree uses angular velocity (ω) as the primary discriminator, with sub-classification by heart rate, joint angle pattern, or muscle force. Safety alerts take highest priority and override all other classifications.
+        A three-tier decision tree fuses angular velocity, heart rate, joint angle, EMG, and SpO₂ to classify behavior. No single sensor can distinguish all 8 states — the matrix below shows why multi-sensor fusion is necessary.
       </p>
+
+      <div style="background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px;">
+        <div style="padding: 14px 20px; background: var(--bg-alt); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+          Sensor–Behavior Fusion Matrix
+        </div>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px; min-width: 640px;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border);">
+                <th style="padding: 12px 16px; text-align: left; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Behavior</th>
+                <th style="padding: 12px 10px; text-align: center; color: var(--text-muted); font-size: 11px;">ω<br><span style="font-weight: 400; font-size: 9px;">velocity</span></th>
+                <th style="padding: 12px 10px; text-align: center; color: var(--text-muted); font-size: 11px;">SpO₂<br><span style="font-weight: 400; font-size: 9px;">oxygen</span></th>
+                <th style="padding: 12px 10px; text-align: center; color: var(--text-muted); font-size: 11px;">θ<br><span style="font-weight: 400; font-size: 9px;">angle</span></th>
+                <th style="padding: 12px 10px; text-align: center; color: var(--text-muted); font-size: 11px;">EMG<br><span style="font-weight: 400; font-size: 9px;">muscle</span></th>
+                <th style="padding: 12px 10px; text-align: center; color: var(--text-muted); font-size: 11px;">T<br><span style="font-weight: 400; font-size: 9px;">temp</span></th>
+                <th style="padding: 12px 16px; text-align: left; color: var(--text-muted); font-size: 11px;">Why fusion is needed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 10px 16px; font-weight: 500;">😴 Sleeping</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="padding: 10px 16px; font-size: 11px; color: var(--text-muted);">ω alone can't separate from Resting</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 10px 16px; font-weight: 500;">🪑 Resting</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="padding: 10px 16px; font-size: 11px; color: var(--text-muted);">HR distinguishes sleep vs. awake rest</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 10px 16px; font-weight: 500;">💻 Office</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="padding: 10px 16px; font-size: 11px; color: var(--text-muted);">Stable θ at 70–100° separates from Walking/Eating</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 10px 16px; font-weight: 500;">🚶 Walking</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="padding: 10px 16px; font-size: 11px; color: var(--text-muted);">Rhythmic ω pattern unique to gait</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 10px 16px; font-weight: 500;">🏃 Aerobic</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="padding: 10px 16px; font-size: 11px; color: var(--text-muted);">Low EMG separates cardio from strength</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 10px 16px; font-weight: 500;">🏋️ Strength</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="padding: 10px 16px; font-size: 11px; color: var(--text-muted);">High EMG = muscle contraction under load</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-light);">
+                <td style="padding: 10px 16px; font-weight: 500; color: var(--danger);">⚠ Low O₂</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--danger); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="padding: 10px 16px; font-size: 11px; color: var(--text-muted);">SpO₂ &lt; 93% overrides all classification</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px 16px; font-weight: 500; color: var(--danger);">⚠ Fatigue</td>
+                <td style="text-align: center; color: var(--danger); font-weight: 700;">●</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--border);">○</td>
+                <td style="text-align: center; color: var(--accent); font-weight: 700;">●</td>
+                <td style="padding: 10px 16px; font-size: 11px; color: var(--text-muted);">Sudden ω drop + elevated T = fatigue onset</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding: 10px 20px; background: var(--bg-alt); border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted);">
+          <span style="color: var(--accent); font-weight: 700;">●</span> required for classification &nbsp;&nbsp;
+          <span style="color: var(--border);">○</span> not used &nbsp;&nbsp;
+          Each behavior requires a unique combination — no single sensor covers all 8 states.
+        </div>
+      </div>
 
       <div class="behavior-tree">
         <div class="tree-level safety">
