@@ -488,7 +488,7 @@
       <button class="sidebar-tab" data-tab="daily"><span class="sidebar-tab-icon">📊</span>Daily</button>
       <button class="sidebar-tab" data-tab="weekly"><span class="sidebar-tab-icon">📈</span>Weekly</button>
       <button class="sidebar-tab" data-tab="feedback"><span class="sidebar-tab-icon">💬</span>Feedback</button>
-      <div class="sidebar-footer">IMSES v1.3.2 · Jiayang Bai</div>
+      <div class="sidebar-footer">IMSES v1.3.3 · Jiayang Bai</div>
     </nav>
 
     <!-- Main content area -->
@@ -1313,11 +1313,12 @@
       if (!window._simInit) window._simInit = { hr: false, spo2: false };
       if (!window._simLastTick) window._simLastTick = 0;
 
-      // HR: wait for valid raw (40-250) WITH skin contact, then correct ÷2 +6 and seed
+      // HR: wait for valid raw WITH skin contact, correct ÷2, clamp to resting range
       if (!window._simInit.hr) {
         if (skinContact && rawHR >= 40 && rawHR <= 250) {
-          const corrected = rawHR / 2 + 6;
-          window._simHR = Math.max(55, Math.min(120, corrected));
+          const corrected = rawHR / 2;
+          // Clamp seed to 65-85 (resting range) regardless of raw value
+          window._simHR = Math.max(65, Math.min(85, corrected));
           window._simInit.hr = true;
           state.values.heartRate = Math.round(window._simHR);
         }
@@ -1341,8 +1342,8 @@
         if (now - window._simLastTick >= 1500) {
           window._simLastTick = now;
           if (window._simInit.hr) {
-            window._simHR += (Math.random() - 0.48) * 3;
-            window._simHR = Math.max(55, Math.min(105, window._simHR));
+            window._simHR += (Math.random() - 0.5) * 2;
+            window._simHR = Math.max(62, Math.min(88, window._simHR));
             state.values.heartRate = Math.round(window._simHR);
           }
           if (window._simInit.spo2) {
