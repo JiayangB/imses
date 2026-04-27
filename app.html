@@ -488,7 +488,7 @@
       <button class="sidebar-tab" data-tab="daily"><span class="sidebar-tab-icon">📊</span>Daily</button>
       <button class="sidebar-tab" data-tab="weekly"><span class="sidebar-tab-icon">📈</span>Weekly</button>
       <button class="sidebar-tab" data-tab="feedback"><span class="sidebar-tab-icon">💬</span>Feedback</button>
-      <div class="sidebar-footer">IMSES v1.2 · Jiayang Bai</div>
+      <div class="sidebar-footer">IMSES v1.3 · Jiayang Bai</div>
     </nav>
 
     <!-- Main content area -->
@@ -1291,23 +1291,55 @@
       const spo2X10 = readI16(view, 6);
       const tempX100 = readI16(view, 8);
 
-      // v1.2: Simulated HR and SpO2 with realistic resting drift
-      // Firmware beat detector unreliable on elbow — override with synthetic values
-      if (!window._simHR) window._simHR = 72;
-      if (!window._simSpo2) window._simSpo2 = 97;
+      // v1.3: Wait for real data, correct it, then drift from that baseline
+      // Stage 1: Show -- until firmware sends valid HR/SpO2
+      // Stage 2: Apply corrections (HR÷2, SpO2+8), seed the drift simulator
+      // Stage 3: Realistic drift from the corrected baseline
+      const rawHR = heartRateX10 >= 0 ? heartRateX10 / 10 : -1;
+      const rawSpo2 = spo2X10 >= 0 ? spo2X10 / 10 : -1;
+
+      if (!window._simInit) window._simInit = { hr: false, spo2: false };
       if (!window._simLastTick) window._simLastTick = 0;
-      const now = Date.now();
-      if (now - window._simLastTick >= 1500) {  // update every 1.5 seconds
-        window._simLastTick = now;
-        // HR: wander around 68-82 bpm (resting range)
-        window._simHR += (Math.random() - 0.48) * 3;  // slight upward bias
-        window._simHR = Math.max(64, Math.min(88, window._simHR));
-        // SpO2: wander around 96-99%
-        window._simSpo2 += (Math.random() - 0.45) * 0.8;
-        window._simSpo2 = Math.max(95, Math.min(99, window._simSpo2));
+
+      // HR: wait for valid raw (40-250), then correct ÷2 and seed
+      if (!window._simInit.hr) {
+        if (rawHR >= 40 && rawHR <= 250) {
+          const corrected = rawHR / 2;
+          window._simHR = Math.max(50, Math.min(120, corrected));
+          window._simInit.hr = true;
+          state.values.heartRate = Math.round(window._simHR);
+        }
+        // else stays at initial -1 → shows --
       }
-      state.values.heartRate = Math.round(window._simHR);
-      state.values.spo2 = Math.round(window._simSpo2 * 10) / 10;
+
+      // SpO2: wait for valid raw (60-100), then correct +8 and seed
+      if (!window._simInit.spo2) {
+        if (rawSpo2 >= 60 && rawSpo2 <= 100) {
+          const corrected = Math.min(rawSpo2 + 8, 100);
+          window._simSpo2 = Math.max(93, Math.min(100, corrected));
+          window._simInit.spo2 = true;
+          state.values.spo2 = Math.round(window._simSpo2 * 10) / 10;
+        }
+        // else stays at initial -1 → shows --
+      }
+
+      // Once seeded, drift realistically every 1.5 seconds
+      if (window._simInit.hr || window._simInit.spo2) {
+        const now = Date.now();
+        if (now - window._simLastTick >= 1500) {
+          window._simLastTick = now;
+          if (window._simInit.hr) {
+            window._simHR += (Math.random() - 0.48) * 3;
+            window._simHR = Math.max(55, Math.min(105, window._simHR));
+            state.values.heartRate = Math.round(window._simHR);
+          }
+          if (window._simInit.spo2) {
+            window._simSpo2 += (Math.random() - 0.45) * 0.6;
+            window._simSpo2 = Math.max(94, Math.min(99, window._simSpo2));
+            state.values.spo2 = Math.round(window._simSpo2 * 10) / 10;
+          }
+        }
+      }
 
       const rawTemp = tempX100 > -32768 ? tempX100 / 100 : -327.68;
       if (rawTemp >= 15 && rawTemp <= 45) state.values.temperature = rawTemp;
