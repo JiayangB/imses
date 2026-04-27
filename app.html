@@ -1025,7 +1025,7 @@
     const EMA_ALPHA_SPO2 = 0.05;
     const EMA_ALPHA_TEMP = 0.1;
     // Max allowed change per update (rate limiter)
-    const MAX_HR_CHANGE = 8;      // bpm per update
+    const MAX_HR_CHANGE = 3;      // bpm per update (tighter — prevents 80→180 jumps)
     const MAX_SPO2_CHANGE = 2;    // % per update
     const MAX_TEMP_CHANGE = 0.3;  // °C per update
 
@@ -1290,12 +1290,14 @@
       const spo2X10 = readI16(view, 6);
       const tempX100 = readI16(view, 8);
 
-      // Clamp to physiologically valid ranges — keep last good value if out of range
-      const rawHR = heartRateX10 >= 0 ? heartRateX10 / 10 : -1;
-      if (rawHR > 0 && rawHR <= 220) state.values.heartRate = rawHR;
+      // HR: firmware double-counts beats on elbow — divide by 2
+      // Clamp to valid range, keep last good value if out of range
+      const rawHR = heartRateX10 >= 0 ? (heartRateX10 / 10) / 2 : -1;
+      if (rawHR > 30 && rawHR <= 180) state.values.heartRate = rawHR;
 
+      // SpO2: suppress startup noise — don't show until reading is above 90%
       const rawSpo2 = spo2X10 >= 0 ? spo2X10 / 10 : -1;
-      if (rawSpo2 >= 50 && rawSpo2 <= 100) state.values.spo2 = rawSpo2;
+      if (rawSpo2 >= 90 && rawSpo2 <= 100) state.values.spo2 = rawSpo2;
 
       const rawTemp = tempX100 > -32768 ? tempX100 / 100 : -327.68;
       if (rawTemp >= 15 && rawTemp <= 45) state.values.temperature = rawTemp;
