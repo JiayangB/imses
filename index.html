@@ -1437,32 +1437,6 @@ writeI16LE(vitalsPacket, 8, tempX100);</pre>
         </p>
       </div>
 
-      <h2 class="sub">Additional sensors</h2>
-      <p class="lead" style="margin-bottom: 16px;">
-        Two sensor modalities were explored during the design phase but not included in the current prototype due to time and integration constraints. Both remain strong candidates for the next revision.
-      </p>
-
-      <div class="cards-3">
-        <div class="card">
-          <div class="card-title">Force-sensitive resistor (FSR)</div>
-          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-            An FSR 402 was tested for direct muscle contraction force measurement. While the sensor worked in isolation, integrating it into the sleeve fabric without affecting comfort and signal quality proved challenging. A future revision with a custom flexible PCB could solve this.
-          </p>
-        </div>
-        <div class="card">
-          <div class="card-title">Galvanic skin response (GSR)</div>
-          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-            Silver electrode pairs for measuring skin conductance (sweat response) were prototyped for stress and exertion detection. Electrode contact reliability during dynamic movement needs further work — a conductive fabric electrode design is planned.
-          </p>
-        </div>
-        <div class="card">
-          <div class="card-title">Heart rate via MAX30102</div>
-          <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-            The MAX30102 currently provides SpO₂. Extracting reliable heart rate from the elbow position (vs. fingertip or wrist) requires additional signal processing work — peak detection algorithms optimized for lower perfusion sites.
-          </p>
-        </div>
-      </div>
-
       <h2 class="sub">Planned improvements</h2>
 
       <div class="cards-3" style="grid-template-columns: 1fr 1fr;">
