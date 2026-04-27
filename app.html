@@ -1018,14 +1018,34 @@
       if (series.length > MAX_POINTS) series.shift();
     }
 
-    // EMA smoothing for display (alpha = 0.15 means ~85% of previous value retained)
+    // EMA smoothing + rate limiter for noisy sensors
     const smooth = { temperature: null, heartRate: null, spo2: null };
-    const EMA_ALPHA = 0.15;
+    // Heavier smoothing for HR/SpO2 (noisy on elbow), lighter for temp
+    const EMA_ALPHA_HR = 0.05;
+    const EMA_ALPHA_SPO2 = 0.05;
+    const EMA_ALPHA_TEMP = 0.1;
+    // Max allowed change per update (rate limiter)
+    const MAX_HR_CHANGE = 8;      // bpm per update
+    const MAX_SPO2_CHANGE = 2;    // % per update
+    const MAX_TEMP_CHANGE = 0.3;  // °C per update
 
     function ema(key, raw) {
       if (raw === null || raw === -1 || raw === -327.68 || Number.isNaN(raw)) return smooth[key];
       if (smooth[key] === null) { smooth[key] = raw; return raw; }
-      smooth[key] += EMA_ALPHA * (raw - smooth[key]);
+
+      // Rate limiter — clamp how much the value can change per update
+      let maxChange, alpha;
+      if (key === 'heartRate') { maxChange = MAX_HR_CHANGE; alpha = EMA_ALPHA_HR; }
+      else if (key === 'spo2') { maxChange = MAX_SPO2_CHANGE; alpha = EMA_ALPHA_SPO2; }
+      else { maxChange = MAX_TEMP_CHANGE; alpha = EMA_ALPHA_TEMP; }
+
+      let clamped = raw;
+      const diff = raw - smooth[key];
+      if (Math.abs(diff) > maxChange) {
+        clamped = smooth[key] + Math.sign(diff) * maxChange;
+      }
+
+      smooth[key] += alpha * (clamped - smooth[key]);
       return smooth[key];
     }
 
