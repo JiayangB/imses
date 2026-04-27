@@ -1021,7 +1021,7 @@
     // EMA smoothing + rate limiter for noisy sensors
     const smooth = { temperature: null, heartRate: null, spo2: null };
     // Heavier smoothing for HR/SpO2 (noisy on elbow), lighter for temp
-    const EMA_ALPHA_HR = 0.05;
+    const EMA_ALPHA_HR = 0.03;
     const EMA_ALPHA_SPO2 = 0.05;
     const EMA_ALPHA_TEMP = 0.1;
     // Max allowed change per update (rate limiter)
@@ -1290,10 +1290,10 @@
       const spo2X10 = readI16(view, 6);
       const tempX100 = readI16(view, 8);
 
-      // HR: firmware double-counts beats on elbow — divide by 2
-      // Clamp to valid range, keep last good value if out of range
-      const rawHR = heartRateX10 >= 0 ? (heartRateX10 / 10) / 2 : -1;
-      if (rawHR > 30 && rawHR <= 180) state.values.heartRate = rawHR;
+      // HR: firmware beat detector is unreliable on elbow placement
+      // Reject anything outside 40-150 bpm — keep last good value
+      const rawHR = heartRateX10 >= 0 ? heartRateX10 / 10 : -1;
+      if (rawHR >= 40 && rawHR <= 150) state.values.heartRate = rawHR;
 
       // SpO2: suppress startup noise — don't show until reading is above 90%
       const rawSpo2 = spo2X10 >= 0 ? spo2X10 / 10 : -1;
