@@ -488,7 +488,7 @@
       <button class="sidebar-tab" data-tab="daily"><span class="sidebar-tab-icon">📊</span>Daily</button>
       <button class="sidebar-tab" data-tab="weekly"><span class="sidebar-tab-icon">📈</span>Weekly</button>
       <button class="sidebar-tab" data-tab="feedback"><span class="sidebar-tab-icon">💬</span>Feedback</button>
-      <div class="sidebar-footer">IMSES v1.3.3 · Jiayang Bai</div>
+      <div class="sidebar-footer">IMSES v1.3.4 · Jiayang Bai</div>
     </nav>
 
     <!-- Main content area -->
@@ -1377,10 +1377,21 @@
       state.values.angle = Math.max(0, Math.min(rawAngle, 180));
 
       const rawVel = readI16(view, 10) / 10;
-      state.values.angularVelocity = Math.max(-500, Math.min(rawVel, 500));
+      const clampedVel = Math.max(-300, Math.min(rawVel, 300));
+      // EMA smoothing for angular velocity to prevent spikes
+      if (state.values.angularVelocity === null) {
+        state.values.angularVelocity = clampedVel;
+      } else {
+        state.values.angularVelocity += 0.2 * (clampedVel - state.values.angularVelocity);
+      }
 
       const rawAccel = readI16(view, 12) / 10;
-      state.values.angularAcceleration = Math.max(-2000, Math.min(rawAccel, 2000));
+      const clampedAccel = Math.max(-500, Math.min(rawAccel, 500));
+      if (state.values.angularAcceleration === null) {
+        state.values.angularAcceleration = clampedAccel;
+      } else {
+        state.values.angularAcceleration += 0.2 * (clampedAccel - state.values.angularAcceleration);
+      }
 
       state.values.bendClosingSpeed = Math.min(readU16(view, 14) / 10, 500);
       state.values.motorState = view.getUint8(16);
