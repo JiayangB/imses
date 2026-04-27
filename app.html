@@ -488,7 +488,7 @@
       <button class="sidebar-tab" data-tab="daily"><span class="sidebar-tab-icon">📊</span>Daily</button>
       <button class="sidebar-tab" data-tab="weekly"><span class="sidebar-tab-icon">📈</span>Weekly</button>
       <button class="sidebar-tab" data-tab="feedback"><span class="sidebar-tab-icon">💬</span>Feedback</button>
-      <div class="sidebar-footer">IMSES v1.3.1 · Jiayang Bai</div>
+      <div class="sidebar-footer">IMSES v1.3.2 · Jiayang Bai</div>
     </nav>
 
     <!-- Main content area -->
@@ -1291,19 +1291,31 @@
       const spo2X10 = readI16(view, 6);
       const tempX100 = readI16(view, 8);
 
-      // v1.3: Wait for real data, correct it, then drift from that baseline
-      // Stage 1: Show -- until firmware sends valid HR/SpO2
-      // Stage 2: Apply corrections (HR÷2, SpO2+8), seed the drift simulator
-      // Stage 3: Realistic drift from the corrected baseline
+      // v1.3.2: Detect body contact via MAX30102 finger/skin flag
+      // When device is on a table (no skin contact), reset HR/SpO2 to --
+      const skinContact = Boolean(state.values.status & 0x02);
+      if (!skinContact && (window._simInit && (window._simInit.hr || window._simInit.spo2))) {
+        // Lost skin contact — reset simulator, show --
+        window._simInit = { hr: false, spo2: false };
+        window._simHR = null;
+        window._simSpo2 = null;
+        window._simLastTick = 0;
+        state.values.heartRate = -1;
+        state.values.spo2 = -1;
+        smooth.heartRate = null;
+        smooth.spo2 = null;
+      }
+
+      // Wait for real data, correct it, then drift from that baseline
       const rawHR = heartRateX10 >= 0 ? heartRateX10 / 10 : -1;
       const rawSpo2 = spo2X10 >= 0 ? spo2X10 / 10 : -1;
 
       if (!window._simInit) window._simInit = { hr: false, spo2: false };
       if (!window._simLastTick) window._simLastTick = 0;
 
-      // HR: wait for valid raw (40-250), then correct ÷2 +6 and seed
+      // HR: wait for valid raw (40-250) WITH skin contact, then correct ÷2 +6 and seed
       if (!window._simInit.hr) {
-        if (rawHR >= 40 && rawHR <= 250) {
+        if (skinContact && rawHR >= 40 && rawHR <= 250) {
           const corrected = rawHR / 2 + 6;
           window._simHR = Math.max(55, Math.min(120, corrected));
           window._simInit.hr = true;
@@ -1312,9 +1324,9 @@
         // else stays at initial -1 → shows --
       }
 
-      // SpO2: wait for valid raw (60-100), then correct +8 and seed
+      // SpO2: wait for valid raw (60-100) WITH skin contact, then correct +8 and seed
       if (!window._simInit.spo2) {
-        if (rawSpo2 >= 60 && rawSpo2 <= 100) {
+        if (skinContact && rawSpo2 >= 60 && rawSpo2 <= 100) {
           const corrected = Math.min(rawSpo2 + 8, 100);
           window._simSpo2 = Math.max(93, Math.min(100, corrected));
           window._simInit.spo2 = true;
