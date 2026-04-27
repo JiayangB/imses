@@ -593,12 +593,12 @@
       <article class="panel metric-card">
         <p class="metric-label">MAX IR</p>
         <p class="metric-value" id="irValue">--<span class="metric-unit">RAW</span></p>
-        <div class="metric-meta">Finger contact debug signal.</div>
+        <div class="metric-meta">IR photoplethysmography → used to compute SpO₂ and heart rate.</div>
       </article>
       <article class="panel metric-card">
         <p class="metric-label">MAX Red</p>
         <p class="metric-value" id="redValue">--<span class="metric-unit">RAW</span></p>
-        <div class="metric-meta">Optical intensity debug signal.</div>
+        <div class="metric-meta">Red LED absorption → combined with IR via Beer–Lambert law for SpO₂.</div>
       </article>
     </section>
 
@@ -1018,20 +1018,35 @@
       if (series.length > MAX_POINTS) series.shift();
     }
 
+    // EMA smoothing for display (alpha = 0.15 means ~85% of previous value retained)
+    const smooth = { temperature: null, heartRate: null, spo2: null };
+    const EMA_ALPHA = 0.15;
+
+    function ema(key, raw) {
+      if (raw === null || raw === -1 || raw === -327.68 || Number.isNaN(raw)) return smooth[key];
+      if (smooth[key] === null) { smooth[key] = raw; return raw; }
+      smooth[key] += EMA_ALPHA * (raw - smooth[key]);
+      return smooth[key];
+    }
+
     function updateMetrics() {
-      ui.heartRateValue.innerHTML = `${formatValue(state.values.heartRate, 1, -1)}<span class="metric-unit">BPM</span>`;
-      ui.spo2Value.innerHTML = `${formatValue(state.values.spo2, 1, -1)}<span class="metric-unit">%</span>`;
-      ui.temperatureValue.innerHTML = `${formatValue(state.values.temperature, 2, -327.68)}<span class="metric-unit">C</span>`;
-      ui.angleValue.innerHTML = `${formatValue(state.values.angle, 2)}<span class="metric-unit">DEG</span>`;
+      const smoothedHR = ema('heartRate', state.values.heartRate);
+      const smoothedSpo2 = ema('spo2', state.values.spo2);
+      const smoothedTemp = ema('temperature', state.values.temperature);
+
+      ui.heartRateValue.innerHTML = `${formatValue(smoothedHR, 1, -1)}<span class="metric-unit">BPM</span>`;
+      ui.spo2Value.innerHTML = `${formatValue(smoothedSpo2, 1, -1)}<span class="metric-unit">%</span>`;
+      ui.temperatureValue.innerHTML = `${formatValue(smoothedTemp, 1, -327.68)}<span class="metric-unit">°C</span>`;
+      ui.angleValue.innerHTML = `${formatValue(state.values.angle, 1)}<span class="metric-unit">DEG</span>`;
       ui.bendSpeedValue.innerHTML = `${formatValue(state.values.bendClosingSpeed, 1)}<span class="metric-unit">DEG/S</span>`;
       ui.motorStateValue.innerHTML = `${formatMotorState(state.values.motorState)}<span class="metric-unit">STATE</span>`;
       ui.motorTimerValue.innerHTML = `${formatValue((state.values.motorPhaseRemainingMs || 0) / 1000, 1)}<span class="metric-unit">S</span>`;
       ui.motorCycleCountValue.innerHTML = `${state.values.motorCycleCount ?? 0}<span class="metric-unit">RUNS</span>`;
-      ui.angularAccelerationValue.innerHTML = `${formatValue(state.values.angularAcceleration, 2)}<span class="metric-unit">DEG/S2</span>`;
+      ui.angularAccelerationValue.innerHTML = `${formatValue(state.values.angularAcceleration, 1)}<span class="metric-unit">DEG/S²</span>`;
       ui.flexValue.innerHTML = `${state.values.flexRaw ?? "--"}<span class="metric-unit">ADC</span>`;
       ui.emgValue.innerHTML = `${state.values.emgRaw ?? "--"}<span class="metric-unit">ADC</span>`;
-      ui.irValue.innerHTML = `${state.values.ir ?? "--"}<span class="metric-unit">RAW</span>`;
-      ui.redValue.innerHTML = `${state.values.red ?? "--"}<span class="metric-unit">RAW</span>`;
+      ui.irValue.innerHTML = `${state.values.ir ?? "--"}<span class="metric-unit">→ SpO₂/HR</span>`;
+      ui.redValue.innerHTML = `${state.values.red ?? "--"}<span class="metric-unit">→ SpO₂/HR</span>`;
 
       ui.imuAxValue.textContent = state.values.imuAx ?? "--";
       ui.imuAyValue.textContent = state.values.imuAy ?? "--";
