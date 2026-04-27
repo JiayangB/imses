@@ -488,7 +488,7 @@
       <button class="sidebar-tab" data-tab="daily"><span class="sidebar-tab-icon">📊</span>Daily</button>
       <button class="sidebar-tab" data-tab="weekly"><span class="sidebar-tab-icon">📈</span>Weekly</button>
       <button class="sidebar-tab" data-tab="feedback"><span class="sidebar-tab-icon">💬</span>Feedback</button>
-      <div class="sidebar-footer">IMSES v1.3 · Jiayang Bai</div>
+      <div class="sidebar-footer">IMSES v1.3.1 · Jiayang Bai</div>
     </nav>
 
     <!-- Main content area -->
@@ -1301,11 +1301,11 @@
       if (!window._simInit) window._simInit = { hr: false, spo2: false };
       if (!window._simLastTick) window._simLastTick = 0;
 
-      // HR: wait for valid raw (40-250), then correct ÷2 and seed
+      // HR: wait for valid raw (40-250), then correct ÷2 +6 and seed
       if (!window._simInit.hr) {
         if (rawHR >= 40 && rawHR <= 250) {
-          const corrected = rawHR / 2;
-          window._simHR = Math.max(50, Math.min(120, corrected));
+          const corrected = rawHR / 2 + 6;
+          window._simHR = Math.max(55, Math.min(120, corrected));
           window._simInit.hr = true;
           state.values.heartRate = Math.round(window._simHR);
         }
@@ -1423,8 +1423,18 @@
       state.server = null;
       state.service = null;
       state.chars = {};
+      // Reset HR/SpO2 simulator — show -- when not connected
+      window._simInit = { hr: false, spo2: false };
+      window._simHR = null;
+      window._simSpo2 = null;
+      window._simLastTick = 0;
+      state.values.heartRate = -1;
+      state.values.spo2 = -1;
+      smooth.heartRate = null;
+      smooth.spo2 = null;
       setConnectionState(false, "Device disconnected.");
       ui.deviceText.textContent = state.device?.name || "No device";
+      scheduleRefresh(true);
     }
 
     async function connectDevice() {
@@ -1768,6 +1778,15 @@
       demoActive = false;
       tabDemoActive.live = false;
       clearInterval(demoInterval);
+      // Reset HR/SpO2 simulator
+      window._simInit = { hr: false, spo2: false };
+      window._simHR = null;
+      window._simSpo2 = null;
+      window._simLastTick = 0;
+      state.values.heartRate = -1;
+      state.values.spo2 = -1;
+      smooth.heartRate = null;
+      smooth.spo2 = null;
       setConnectionState(false, 'Demo mode ended.');
       updateDemoButtons();
       populateSummaryTabs();
