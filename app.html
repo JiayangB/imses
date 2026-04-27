@@ -1270,28 +1270,42 @@
       const spo2X10 = readI16(view, 6);
       const tempX100 = readI16(view, 8);
 
-      state.values.heartRate = heartRateX10 >= 0 ? heartRateX10 / 10 : -1;
-      state.values.spo2 = spo2X10 >= 0 ? spo2X10 / 10 : -1;
-      state.values.temperature = tempX100 > -32768 ? tempX100 / 100 : -327.68;
+      // Clamp to physiologically valid ranges
+      const rawHR = heartRateX10 >= 0 ? heartRateX10 / 10 : -1;
+      state.values.heartRate = (rawHR > 0 && rawHR <= 220) ? rawHR : -1;
+
+      const rawSpo2 = spo2X10 >= 0 ? spo2X10 / 10 : -1;
+      state.values.spo2 = (rawSpo2 >= 50 && rawSpo2 <= 100) ? rawSpo2 : -1;
+
+      const rawTemp = tempX100 > -32768 ? tempX100 / 100 : -327.68;
+      state.values.temperature = (rawTemp >= 15 && rawTemp <= 45) ? rawTemp : -327.68;
+
       state.values.red = readU32(view, 10);
       state.values.ir = readU32(view, 14);
 
-      pushHistory("heartRate", state.values.heartRate >= 0 ? state.values.heartRate : null);
-      pushHistory("spo2", state.values.spo2 >= 0 ? state.values.spo2 : null);
-      pushHistory("temperature", state.values.temperature > -300 ? state.values.temperature : null);
+      pushHistory("heartRate", state.values.heartRate > 0 ? state.values.heartRate : null);
+      pushHistory("spo2", state.values.spo2 > 0 ? state.values.spo2 : null);
+      pushHistory("temperature", state.values.temperature > 15 ? state.values.temperature : null);
       pushHistory("red", state.values.red);
       pushHistory("ir", state.values.ir);
     }
 
     function handleMotionPacket(view) {
       state.sequence = readU16(view, 0);
-      state.values.flexRaw = readU16(view, 2);
-      state.values.emgRaw = readU16(view, 4);
-      state.values.ntcRaw = readU16(view, 6);
-      state.values.angle = readI16(view, 8) / 100;
-      state.values.angularVelocity = readI16(view, 10) / 10;
-      state.values.angularAcceleration = readI16(view, 12) / 10;
-      state.values.bendClosingSpeed = readU16(view, 14) / 10;
+      state.values.flexRaw = Math.min(readU16(view, 2), 4095);
+      state.values.emgRaw = Math.min(readU16(view, 4), 4095);
+      state.values.ntcRaw = Math.min(readU16(view, 6), 4095);
+
+      const rawAngle = readI16(view, 8) / 100;
+      state.values.angle = Math.max(0, Math.min(rawAngle, 180));
+
+      const rawVel = readI16(view, 10) / 10;
+      state.values.angularVelocity = Math.max(-500, Math.min(rawVel, 500));
+
+      const rawAccel = readI16(view, 12) / 10;
+      state.values.angularAcceleration = Math.max(-2000, Math.min(rawAccel, 2000));
+
+      state.values.bendClosingSpeed = Math.min(readU16(view, 14) / 10, 500);
       state.values.motorState = view.getUint8(16);
       state.values.motorCycleCount = view.getUint8(17);
       state.values.motorPhaseRemainingMs = readU16(view, 18);
